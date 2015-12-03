@@ -34,7 +34,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @dataProvider dataProvider
      */
 	public function test_addUser(array $testData){
-		$x=self::$ds->addUser('Bob','Smith',$testData['email'],$testData['password'],'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+		$x=self::$ds->addUser('Bob','Smith',$testData['email'],$testData['password'],'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
 		$this->assertEquals('{"results":"User successfully created"}',$x);
 	}
 
@@ -43,7 +43,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the First Name
      */
     public function test_addUserMissingFnameException(){
-    	self::$ds->addUser('','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -51,7 +51,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Last Name
      */
     public function test_addUserMissingLnameException(){
-    	self::$ds->addUser('Bob','','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -59,7 +59,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the E-Mail Address
      */
     public function test_addUserMissingEmailException(){
-    	self::$ds->addUser('Bob','Smith','','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -67,7 +67,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Password
      */
     public function test_addUserMissingPasswordException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -75,7 +75,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Middle Name Initial
      */
     public function test_addUserMissingMiddleNameInitialException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -83,7 +83,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Weight
      */
     public function test_addUserMissingWeightException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E','',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E','',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -91,7 +91,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Height
      */
     public function test_addUserMissingHeightException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,'','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,'','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -99,7 +99,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Birth Date
      */
     public function test_addUserMissingBirthDateException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -107,7 +107,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Gender
      */
     public function test_addUserMissingGenderException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','',34,'123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -115,7 +115,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Waist Size
      */
     public function test_addUserMissingWaistSizeException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M','','123 Easy Street','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M','','123 Easy Street','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -123,7 +123,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide Address Line #1
      */
     public function test_addUserMissingAddressLine1Exception(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'','A2','Edison','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'','A2','Edison','NJ','08854','Hisp');
     }
 
     /**
@@ -131,7 +131,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the City
      */
     public function test_addUserMissingCityException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','','NJ','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','','NJ','08854','Hisp');
     }
 
     /**
@@ -139,7 +139,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the State
      */
     public function test_addUserMissingStateException(){
-    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','','08854');
+    	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','','08854','Hisp');
     }
 
     /**
@@ -147,7 +147,15 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Zip Code
      */
     public function test_addUserMissingZipCodeException(){
-   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','');
+   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','','Hisp');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Ethnicity
+     */
+    public function test_addUserMissingEthnicityException(){
+   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','');
    	}
 
     /**
@@ -155,21 +163,29 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage Invalid Height
      */
     public function test_addUserInvalidHeightException(){
-   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,'72x','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,'72x','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
    	}
     /**
      * @expectedException DatastoreException
 	 * @expectedExceptionMessage Invalid Weight
      */
     public function test_addUserInvalidWeightException(){
-   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E','2sd',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854');
+   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E','2sd',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','Hisp');
    	}
     /**
      * @expectedException DatastoreException
 	 * @expectedExceptionMessage Invalid Waist Size
      */
     public function test_addUserInvalidWaistSizeException(){
-   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M','sd34f-','123 Easy Street','A2','Edison','NJ','08854');
+   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M','sd34f-','123 Easy Street','A2','Edison','NJ','08854','Hisp');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage This ethnicity does not exist
+     */
+    public function test_addUserInvalidEthnicityException(){
+   	 	self::$ds->addUser('Bob','Smith','email@us.com','password','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854','HispXX');
    	}
 
     /**
@@ -392,7 +408,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @dataProvider dataProvider
      */
 	public function test_updateUser(array $testData){
-		$x=self::$ds->updateUser('Bob-234','Smith',$testData['email'],'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+		$x=self::$ds->updateUser('Bob-234','Smith',$testData['email'],'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
 		$this->assertEquals('{"results":"User successfully updated"}',$x);
 	}
 
@@ -401,7 +417,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the First Name
      */
     public function test_updateUserMissingFnameException(){
-    	self::$ds->updateUser('','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -409,7 +425,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Last Name
      */
     public function test_updateUserMissingLnameException(){
-    	self::$ds->updateUser('Bob','','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -417,7 +433,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the E-Mail Address
      */
     public function test_updateUserMissingEmailException(){
-    	self::$ds->updateUser('Bob','Smith','','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith','','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -425,7 +441,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Middle Name Initial
      */
     public function test_updateUserMissingMiddleNameInitialException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -433,7 +449,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Weight
      */
     public function test_updateUserMissingWeightException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E','',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E','',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -441,7 +457,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Height
      */
     public function test_updateUserMissingHeightException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,'','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,'','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -449,7 +465,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Birth Date
      */
     public function test_updateUserMissingBirthDateException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -457,7 +473,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Gender
      */
     public function test_updateUserMissingGenderException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -465,7 +481,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Waist Size
      */
     public function test_updateUserMissingWaistSizeException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M','','123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M','','123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -473,7 +489,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide Address Line #1
      */
     public function test_updateUserMissingAddressLine1Exception(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M',34,'','A2','Edison','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -481,7 +497,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the City
      */
     public function test_updateUserMissingCityException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','','NJ','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','','NJ','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -489,7 +505,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the State
      */
     public function test_updateUserMissingStateException(){
-    	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','','08854',self::$authtoken);
+    	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','','08854',self::$authtoken,'Hisp');
     }
 
     /**
@@ -497,7 +513,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage You must provide the Zip Code
      */
     public function test_updateUserMissingZipCodeException(){
-   	 	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','',self::$authtoken);
+   	 	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','',self::$authtoken,'Hisp');
    	}
 
     /**
@@ -505,7 +521,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage Invalid Height
      */
     public function test_updateUserInvalidHeightException(){
-   	 	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,'72x','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+   	 	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,'72x','1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
    	}
 
     /**
@@ -513,7 +529,7 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage Invalid Weight
      */
        public function test_updateUserInvalidWeightException(){
-   	 	self::$ds->updateUser('Bob','Smith','email@us.com','E','2sd',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+   	 	self::$ds->updateUser('Bob','Smith',self::$email,'E','2sd',72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
    	}
 
     /**
@@ -521,6 +537,14 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessage Invalid Waist Size
      */
     public function test_updateUserInvalidWaistSizeException(){
-   	 	self::$ds->updateUser('Bob','Smith','email@us.com','E',220,72,'1987-09-16T00:00:00Z','M','sd34f-','123 Easy Street','A2','Edison','NJ','08854',self::$authtoken);
+   	 	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M','34zz-','123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hisp');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage This ethnicity does not exist
+     */
+    public function test_updateUserInvalidEthnicityException(){
+   	 	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hispz');
    	}
 }
