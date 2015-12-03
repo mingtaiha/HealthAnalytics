@@ -112,10 +112,10 @@ class RegressionTree():
 
 		#	filterAttribute is the name of the attribute that minimizes the
 		#	average of the ranges of the predictor the most
-			mean = dataframe[predictor].mean()
-			std = dataframe[predictor].std()
-			minRange = (mean + std) - (mean - std)
-#			minRange = dataframe[predictor].max() - dataframe[predictor].min()
+#			mean = dataframe[predictor].mean()
+#			std = dataframe[predictor].std()
+#			minRange = (mean + std) - (mean - std)
+			minRange = dataframe[predictor].max() - dataframe[predictor].min()
 			filterAttribute = None
 
 		#	For each attribute that has not yet been used to filter the data,
@@ -143,10 +143,10 @@ class RegressionTree():
 					for choice in bins[attribute]:
 
 						tmpdf = dataframe[dataframe[attribute] == choice[ 0 ]]
-#						tmpRange += (tmpdf[predictor].max() - tmpdf[predictor].min()) \
-#										* tmpdf["SEQN"].count()
+						tmpRange += (tmpdf[predictor].max() - tmpdf[predictor].min()) \
+										* tmpdf["SEQN"].count()
 
-						tmpRange += (2 * tmpdf[predictor].std()) / tmpdf["SEQN"].count()
+#						tmpRange += (2 * tmpdf[predictor].std()) / tmpdf["SEQN"].count()
 					tmpRange /= len(bins[attribute])
 					tmpRange /= dataframe["SEQN"].count()
 
@@ -155,10 +155,10 @@ class RegressionTree():
 
 						tmpdf = dataframe[(dataframe[attribute] >= choice[ 0 ]) & \
 									(dataframe[attribute] <= choice[ 1 ])]
-#						tmpRange += (tmpdf[predictor].max() - tmpdf[predictor].min()) \
-#										* tmpdf["SEQN"].count()
+						tmpRange += (tmpdf[predictor].max() - tmpdf[predictor].min()) \
+										* tmpdf["SEQN"].count()
 
-						tmpRange += (2 * tmpdf[predictor].std()) / tmpdf["SEQN"].count()
+#						tmpRange += (2 * tmpdf[predictor].std()) / tmpdf["SEQN"].count()
 #					tmpRange /= len(bins[attribute])
 					tmpRange /= dataframe["SEQN"].count()
 
@@ -222,9 +222,9 @@ class RegressionTree():
 									& (dataframe[filterAttribute]
 									<= bins[filterAttribute][ i ][ 1 ])]
 						
-					tmpMean = dfChild[predictor].mean()
-					tmpStd = dfChild[predictor].std()
-					tmpChild.range = [tmpMean - tmpStd, tmpMean + tmpStd]
+#					tmpMean = dfChild[predictor].mean()
+#					tmpStd = dfChild[predictor].std()
+#					tmpChild.range = [tmpMean - tmpStd, tmpMean + tmpStd]
 
 					tmpChild.node_filter['Node_Entries'] = dfChild['SEQN'].count()
 		#	Recurse
@@ -451,12 +451,12 @@ def validateEntry(testEntry, dataModel, node, predictor):
 #		print dataModel[predictor]
 #		print dataModel[predictor].min()
 
-#		if (testEntry[predictor] >= dataModel[predictor].min()) & \
-#			(testEntry[predictor] <= dataModel[predictor].max()):
-		mean = dataModel[predictor].mean()
-		std = dataModel[predictor].std()
-		if ((testEntry[predictor] >= (mean - std)) & \
-				(testEntry[predictor] <= (mean + std))):
+		if (testEntry[predictor] >= dataModel[predictor].min()) & \
+			(testEntry[predictor] <= dataModel[predictor].max()):
+#		mean = dataModel[predictor].mean()
+#		std = dataModel[predictor].std()
+#		if ((testEntry[predictor] >= (mean - std)) & \
+#				(testEntry[predictor] <= (mean + std))):
 
 #			print testEntry[predictor], "Correct"
 #			print "\t", "Min: ", dataModel[predictor].min(), \
@@ -850,13 +850,13 @@ for state in range(len(state_abb)):
 	ldl_p.append([state_abb[state], str(validateLDL)])
 	#modelLDL.print_Tree(modelLDL.root)
 	
-	print "\tExporting Model to JSON..."
-	ldljson = modelLDL.treeToJson(modelLDL.root)
+#	print "\tExporting Model to JSON..."
+#	ldljson = modelLDL.treeToJson(modelLDL.root)
 
-	with open(state_abb[ state ] + '_LDL.json', 'w') as jsonfile:
-		json.dump(ldljson, jsonfile)
+#	with open(state_abb[ state ] + '_LDL.json', 'w') as jsonfile:
+#		json.dump(ldljson, jsonfile)
 
-	print "Done\n"
+#	print "Done\n"
 
 
 	print "\tBuilding HDL Model..."
@@ -874,11 +874,11 @@ for state in range(len(state_abb)):
 	hdl_p.append([state_abb[state], str(validateHDL)])
 	#modelHDL.print_Tree(modelHDL.root)
 
-	print "\tExporting Model to JSON..."
-	hdljson = modelHDL.treeToJson(modelHDL.root)
+#	print "\tExporting Model to JSON..."
+#	hdljson = modelHDL.treeToJson(modelHDL.root)
 
-	with open(state_abb[ state ] + '_HDL.json', 'w') as jsonfile:
-		json.dump(hdljson, jsonfile)
+#	with open(state_abb[ state ] + '_HDL.json', 'w') as jsonfile:
+#		json.dump(hdljson, jsonfile)
 
 #	print "Done\n"
 
@@ -898,11 +898,11 @@ for state in range(len(state_abb)):
 	tri_p.append([state_abb[state], str(validateTri)])
 	#modelTri.print_Tree(modelTri.root)
 
-	print "\tExporting Model to JSON..."
-	trijson = modelTri.treeToJson(modelTri.root)
+#	print "\tExporting Model to JSON..."
+#	trijson = modelTri.treeToJson(modelTri.root)
 
-	with open(state_abb[ state ] + '_Tri.json', 'w') as jsonfile:
-		json.dump(trijson, jsonfile)
+#	with open(state_abb[ state ] + '_Tri.json', 'w') as jsonfile:
+#		json.dump(trijson, jsonfile)
 
 #	print "Done\n"
 
@@ -922,11 +922,11 @@ for state in range(len(state_abb)):
 	sys_p.append([state_abb[state], str(validateSys)])
 	#modelSys.print_Tree(modelSys.root)
 
-	print "\tExporting Model to JSON..."
-	sysjson = modelSys.treeToJson(modelSys.root)
+#	print "\tExporting Model to JSON..."
+#	sysjson = modelSys.treeToJson(modelSys.root)
 
-	with open(state_abb[ state ] + '_Sys.json', 'w') as jsonfile:
-		json.dump(sysjson, jsonfile)
+#	with open(state_abb[ state ] + '_Sys.json', 'w') as jsonfile:
+#		json.dump(sysjson, jsonfile)
 
 #	print "Done\n"
 
@@ -945,11 +945,11 @@ for state in range(len(state_abb)):
 	dia_p.append([state_abb[state], str(validateDia)])
 	#modelDia.print_Tree(modelDia.root)
 
-	print "\tExporting Model to JSON..."
-	diajson = modelDia.treeToJson(modelDia.root)
+#	print "\tExporting Model to JSON..."
+#	diajson = modelDia.treeToJson(modelDia.root)
 
-	with open(state_abb[ state ] + '_Dia.json', 'w') as jsonfile:
-		json.dump(diajson, jsonfile)
+#	with open(state_abb[ state ] + '_Dia.json', 'w') as jsonfile:
+#		json.dump(diajson, jsonfile)
 
 #	print "Done\n"
 
@@ -968,13 +968,13 @@ for state in range(len(state_abb)):
 #	print "HR  Model Accuracy (%): ", validateHR
 	hr_p.append([state_abb[state], str(validateHR)])
 	#modelHR.print_Tree(modelHR.root)
-	print "Done\n"
+#	print "Done\n"
 
-	print "\tExporting Model to JSON..."
-	hrjson = modelHR.treeToJson(modelHR.root)
+#	print "\tExporting Model to JSON..."
+#	hrjson = modelHR.treeToJson(modelHR.root)
 
-	with open(state_abb[ state ] + '_HR.json', 'w') as jsonfile:
-		json.dump(hrjson, jsonfile)
+#	with open(state_abb[ state ] + '_HR.json', 'w') as jsonfile:
+#		json.dump(hrjson, jsonfile)
 
 #	print "Done\n"
 
@@ -1002,27 +1002,27 @@ for state in range(len(state_abb)):
 #			ldlModelData, hdlModelData, triModelData, sysModelData, diaModelData, hrModelData)
 
 
-with open('LDL_State_Corr_Accuracy_2.csv', 'w') as ldlcsv:
+with open('LDL_State_Corr_Accuracy.csv', 'w') as ldlcsv:
 	a = csv.writer(ldlcsv, delimiter=',')
 	a.writerows(ldl_p)
 
-with open('HDL_State_Corr_Accuracy_2.csv', 'w') as hdlcsv:
+with open('HDL_State_Corr_Accuracy.csv', 'w') as hdlcsv:
 	a = csv.writer(hdlcsv, delimiter=',')
 	a.writerows(hdl_p)
 
-with open('Tri_State_Corr_Accuracy_2.csv', 'w') as tricsv:
+with open('Tri_State_Corr_Accuracy.csv', 'w') as tricsv:
 	a = csv.writer(tricsv, delimiter=',')
 	a.writerows(tri_p)
 
-with open('Sys_State_Corr_Accuracy_2.csv', 'w') as syscsv:
+with open('Sys_State_Corr_Accuracy.csv', 'w') as syscsv:
 	a = csv.writer(syscsv, delimiter=',')
 	a.writerows(sys_p)
 
-with open('Dia_State_Corr_Accuracy_2.csv', 'w') as diacsv:
+with open('Dia_State_Corr_Accuracy.csv', 'w') as diacsv:
 	a = csv.writer(diacsv, delimiter=',')
 	a.writerows(dia_p)
 
-with open('HR_State_Corr_Accuracy_2.csv', 'w') as hrcsv:
+with open('HR_State_Corr_Accuracy.csv', 'w') as hrcsv:
 	a = csv.writer(hrcsv, delimiter=',')
 	a.writerows(hr_p)
 

@@ -488,7 +488,7 @@ def validateModel(testModel, dataModel, model, predictor):
 		correctPredictions += validateEntry(testModel.iloc[ i ], \
 								dataModel, model.root, predictor)
 
-	return 100 * correctPredictions / totalEntries
+	return 100 * float(correctPredictions) / float(totalEntries)
 
 
 ##########################################################
@@ -781,8 +781,8 @@ ldlModelData , ldlValidateData = splitData(df_ch)
 ldlBins = df_attribute_dict(ldlModelData)
 modelLDL = RegressionTree(ldlModelData)
 modelLDL.modID3(modelLDL.root, ldlModelData, testFree, ldlBins, "LDL")
-#validateLDL = validateModel(ldlModelData, ldlValidateData, modelLDL, "LDL")
-#print "LDL Model Accuracy (%): ", validateLDL
+validateLDL = validateModel(ldlModelData, ldlValidateData, modelLDL, "LDL")
+print "LDL Model Accuracy (%): ", validateLDL
 #modelLDL.print_Tree(modelLDL.root)
 print "Done"
 
@@ -791,8 +791,8 @@ hdlModelData, hdlValidateData = splitData(df_ch)
 hdlBins = df_attribute_dict(hdlModelData)
 modelHDL = RegressionTree(hdlModelData)
 modelHDL.modID3(modelHDL.root, hdlModelData, testFree, hdlBins, "HDL")
-#validateHDL = validateModel(hdlModelData, hdlValidateData, modelHDL, "HDL")
-#print "HDL Model Accuracy (%): ", validateHDL
+validateHDL = validateModel(hdlModelData, hdlValidateData, modelHDL, "HDL")
+print "HDL Model Accuracy (%): ", validateHDL
 #modelHDL.print_Tree(modelHDL.root)
 print "Done"
 
@@ -801,8 +801,8 @@ triModelData, triValidateData = splitData(df_ch)
 triBins = df_attribute_dict(triModelData)
 modelTri = RegressionTree(triModelData)
 modelTri.modID3(modelTri.root, triModelData, testFree, triBins, "Tri")
-#validateTri = validateModel(triModelData, triValidateData, modelTri, "Tri")
-#print "Tri Model Accuracy (%): ", validateTri
+validateTri = validateModel(triModelData, triValidateData, modelTri, "Tri")
+print "Tri Model Accuracy (%): ", validateTri
 #modelTri.print_Tree(modelTri.root)
 print "Done"
 
@@ -811,8 +811,8 @@ sysModelData, sysValidateData = splitData(df_bp)
 sysBins = df_attribute_dict(sysModelData)
 modelSys = RegressionTree(sysModelData)
 modelSys.modID3(modelSys.root, sysModelData, testFree, sysBins, "Avg_Sys")
-#validateSys = validateModel(sysModelData, sysValidateData, modelSys, "Avg_Sys")
-#print "Sys Model Accuracy (%): ", validateSys
+validateSys = validateModel(sysModelData, sysValidateData, modelSys, "Avg_Sys")
+print "Sys Model Accuracy (%): ", validateSys
 #modelSys.print_Tree(modelSys.root)
 print "Done"
 
@@ -821,8 +821,8 @@ diaModelData, diaValidateData = splitData(df_bp)
 diaBins = df_attribute_dict(diaModelData)
 modelDia = RegressionTree(diaModelData)
 modelDia.modID3(modelDia.root, diaModelData, testFree, diaBins, "Avg_Dia")
-#validateDia = validateModel(diaModelData, diaValidateData, modelDia, "Avg_Dia")
-#print "Dia Model Accuracy (%): ", validateDia
+validateDia = validateModel(diaModelData, diaValidateData, modelDia, "Avg_Dia")
+print "Dia Model Accuracy (%): ", validateDia
 #modelDia.print_Tree(modelDia.root)
 print "Done"
 
@@ -831,8 +831,8 @@ hrModelData, hrValidateData = splitData(df_hr)
 hrBins = df_attribute_dict(hrModelData)
 modelHR = RegressionTree(hrModelData)
 modelHR.modID3(modelHR.root, hrModelData, testFree, hrBins, "HR")
-#validateHR = validateModel(hrModelData, hrValidateData, modelHR, "HR")
-#print "HR  Model Accuracy (%): ", validateHR
+validateHR = validateModel(hrModelData, hrValidateData, modelHR, "HR")
+print "HR  Model Accuracy (%): ", validateHR
 #modelHR.print_Tree(modelHR.root)
 print "Done"
 #print "\n\n"
