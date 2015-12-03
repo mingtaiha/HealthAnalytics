@@ -94,7 +94,7 @@ class datastore
 		}
 	}
 
-	public function addUser($fname,$lname,$email,$passwd,$mi,$weight,$height,$birth_date,$gender,$waist_size,$address1,$address2,$city,$state,$zip){
+	public function addUser($fname,$lname,$email,$passwd,$mi,$weight,$height,$birth_date,$gender,$waist_size,$address1,$address2,$city,$state,$zip,$ethnicity){
 		if(empty($fname)){throw new DatastoreException('You must provide the First Name',5);}
 		if(empty($lname)){throw new DatastoreException('You must provide the Last Name',5);}
 		if(empty($email)){throw new DatastoreException('You must provide the E-Mail Address',5);}
@@ -109,32 +109,37 @@ class datastore
 		if(empty($city)){throw new DatastoreException('You must provide the City',5);}
 		if(empty($state)){throw new DatastoreException('You must provide the State',5);}
 		if(empty($zip)){throw new DatastoreException('You must provide the Zip Code',5);}
+		if(empty($ethnicity)){throw new DatastoreException('You must provide the Ethnicity',5);}
 		if(!is_numeric($height)){throw new DatastoreException('Invalid Height',5);}
 		if(!is_numeric($weight)){throw new DatastoreException('Invalid Weight',5);}
 		if(!is_numeric($waist_size)){throw new DatastoreException('Invalid Waist Size',5);}
-//$birth_date='2015-11-05T13:12:43.511Z';
-//if (preg_match("/\d{4}-[0-1]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d:[0-5]\d\.?\d?\d?\d?Z/", $birth_date)) {
-//    echo "A match was found.";
-//} else {
-//    echo "A match was not found.".$birth_date;
-//}
-
-
 		try{
-			$pstmt=$this->db->prepare('INSERT INTO people (fname,lname,email,passwd,mi,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+			$pstmt=$this->db->prepare('INSERT INTO people (fname,lname,email,passwd,mi,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip,ethnicity) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
 			$passwd=password_hash($passwd, PASSWORD_BCRYPT, ['cost'=>11]);
-			$pstmt->execute([$fname,$lname,$email,$passwd,$mi,$weight,$height,$birth_date,strtoupper($gender),$waist_size,$address1,$address2,$city,$state,$zip]);
+			$pstmt->execute([$fname,$lname,$email,$passwd,$mi,$weight,$height,$birth_date,strtoupper($gender),$waist_size,$address1,$address2,$city,$state,$zip,$ethnicity]);
 			return('{"results":"User successfully created"}');
 		}
 		catch(PDOException $e){
 			$this->__logError($e->getMessage(),__FUNCTION__);
-			if($e->errorInfo[1]==1062){$txt='This email address already exists';$code=4;}
-			else{$txt='Unable to create user';$code=2;}
+			switch($e->errorInfo[1]){
+				case 1062:
+					$txt='This email address already exists';
+					$code=4;
+				break;
+				case 1452:
+					$txt='This ethnicity does not exist';
+					$code=4;
+				break;
+				default:
+					$txt='Unable to create user';
+					$code=2;
+				break;
+			}
 			throw new DatastoreException($txt,$code);
 		}
 	}
 
-	function addWorkout($authtoken,$workout_type,$distance,$duration,$workout_timestamp,$calories,$comments){
+	public function addWorkout($authtoken,$workout_type,$distance,$duration,$workout_timestamp,$calories,$comments){
 		$this->__authenticateUser($authtoken);
 		if(empty($workout_type)){throw new DatastoreException('You must provide the Workout Type',5);}
 		if(empty($distance)){throw new DatastoreException('You must provide the Workout Distance',5);}
@@ -152,19 +157,19 @@ class datastore
 		catch(PDOException $e){throw new DatastoreException('Unable to save workout',1);}
 	}
 
-	public function getUser($email,$authtoken){
-		$this->__authenticateUser($authtoken);
+	public function getEthnicities($authtoken){
 		try{
-			$pstmt=$this->db->prepare('SELECT fname,mi,lname,role,email,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip FROM people WHERE email=?');
-			$pstmt->execute([$email]);
-			$rs=$pstmt->fetch(PDO::FETCH_ASSOC);
-			if($rs['email']!=$this->authenticatedUser['email']){throw new DatastoreException('You cannot retrieve this user',2);}
-			return json_encode($this->__typecast('user',$rs));
+			$eth=[];
+			$stmt=$this->db->query('SELECT * FROM `ethnicities` ORDER BY ethnicity');
+			while($rs=$stmt->fetch(PDO::FETCH_ASSOC)){
+				$eth[]=$rs;
+			}
+			return json_encode($eth);
 		}
-		catch(PDOException $e){throw new DatastoreException('Unable to retrieve user',1);}
+		catch(PDOException $e){throw new DatastoreException('Unable to fetch Ethnicities',1);}
 	}
 
-	function getFood($authtoken,$userfood_id){
+	public function getFood($authtoken,$userfood_id){
 		$this->__authenticateUser($authtoken);
 		try{
 			$valid=FALSE;
@@ -240,6 +245,18 @@ class datastore
 		$person=['State'=>$state,'Gender'=>strtoupper($gender),'Waist'=>$waist,'Height'=>$height,'Age_years'=>$age,'Ethnicity'=>$ethnicity];
 		$model=new model($person);
 		return json_encode($model->getStats());
+	}
+
+	public function getUser($email,$authtoken){
+		$this->__authenticateUser($authtoken);
+		try{
+			$pstmt=$this->db->prepare('SELECT fname,mi,lname,role,email,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip FROM people WHERE email=?');
+			$pstmt->execute([$email]);
+			$rs=$pstmt->fetch(PDO::FETCH_ASSOC);
+			if($rs['email']!=$this->authenticatedUser['email']){throw new DatastoreException('You cannot retrieve this user',2);}
+			return json_encode($this->__typecast('user',$rs));
+		}
+		catch(PDOException $e){throw new DatastoreException('Unable to retrieve user',1);}
 	}
 
 	function getUserAll($authtoken){
@@ -351,7 +368,7 @@ class datastore
 		catch(PDOException $e){throw new DatastoreException('Unable to logout user',1);}
 	}
 
-	public function updateUser($fname,$lname,$email,$mi,$weight,$height,$birth_date,$gender,$waist_size,$address1,$address2,$city,$state,$zip,$authtoken){
+	public function updateUser($fname,$lname,$email,$mi,$weight,$height,$birth_date,$gender,$waist_size,$address1,$address2,$city,$state,$zip,$authtoken,$ethnicity){
 		if(empty($fname)){throw new DatastoreException('You must provide the First Name',5);}
 		if(empty($lname)){throw new DatastoreException('You must provide the Last Name',5);}
 		if(empty($email)){throw new DatastoreException('You must provide the E-Mail Address',5);}
@@ -365,20 +382,30 @@ class datastore
 		if(empty($city)){throw new DatastoreException('You must provide the City',5);}
 		if(empty($state)){throw new DatastoreException('You must provide the State',5);}
 		if(empty($zip)){throw new DatastoreException('You must provide the Zip Code',5);}
+		if(empty($ethnicity)){throw new DatastoreException('You must provide the Ethnicity',5);}
 		if(!is_numeric($height)){throw new DatastoreException('Invalid Height',5);}
 		if(!is_numeric($weight)){throw new DatastoreException('Invalid Weight',5);}
 		if(!is_numeric($waist_size)){throw new DatastoreException('Invalid Waist Size',5);}
-
 		try{
 			$this->__authenticateUser($authtoken);
 			if($email!=$this->authenticatedUser['email']){throw new DatastoreException('You cannot update this user',2);}
-			$pstmt=$this->db->prepare('UPDATE people SET fname=?,lname=?,mi=?,weight=?,height=?,birth_date=?,gender=?,waist_size=?,address1=?,address2=?,city=?,state=?,zip=? WHERE email=?');
-			$pstmt->execute([$fname,$lname,$mi,$weight,$height,$birth_date,strtoupper($gender),$waist_size,$address1,$address2,$city,$state,$zip,$email]);
+			$pstmt=$this->db->prepare('UPDATE people SET fname=?,lname=?,mi=?,weight=?,height=?,birth_date=?,gender=?,waist_size=?,address1=?,address2=?,city=?,state=?,zip=?,ethnicity=? WHERE email=?');
+			$pstmt->execute([$fname,$lname,$mi,$weight,$height,$birth_date,strtoupper($gender),$waist_size,$address1,$address2,$city,$state,$zip,$ethnicity,$email]);
 			return('{"results":"User successfully updated"}');
 		}
 		catch(PDOException $e){
 			$this->__logError($e->getMessage(),__FUNCTION__);
-			throw new DatastoreException('Unable to create user',2);
+			switch($e->errorInfo[1]){
+				case 1452:
+					$txt='This ethnicity does not exist';
+					$code=4;
+				break;
+				default:
+					$txt='Unable to update user';
+					$code=2;
+				break;
+			}
+			throw new DatastoreException($txt,$code);
 		}
 	}
 }
