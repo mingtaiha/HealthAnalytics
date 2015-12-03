@@ -149,6 +149,7 @@ angular.module('starter.services', ['starter.config'])
   service.ClearCredentials = ClearCredentials;
   service.IsLoggedIn = IsLoggedIn;
   service.CurrentUser = CurrentUser;
+  service.SetCurrentUser = SetCurrentUser;
   return service;
 
   function Login(username, password, callback) {
@@ -175,10 +176,12 @@ angular.module('starter.services', ['starter.config'])
         if(token && token.authtoken){
           // we logged in, let's retrieve the user
           SetCredentials(username, password, token.authtoken, undefined);
-          UserService.GetByUsername(username.toLowerCase())
-          .then(function(response) {
+          UserService.GetByUsername(username.toLowerCase()).then(function(response) {
             if(response.success) {
-              SetCredentials(username, password, token.authtoken, response.data);
+              var user = response.data;
+              user.gender = user.gender.toLowerCase(); // send gender to lowercase....
+              user.birth_date = moment(user.birth_date).toDate(); // convert date object
+              SetCredentials(username, password, token.authtoken, user);
             } else {
               Logout(); // logout because we couldn't retrieve the user...
             }
@@ -213,6 +216,13 @@ angular.module('starter.services', ['starter.config'])
       return {};
     }
      
+  }
+
+  function SetCurrentUser(user){
+    if(user){
+      $rootScope.globals.currentUser.user = user;
+      $cookieStore.put('globals', $rootScope.globals);
+    } 
   }
 
   function IsLoggedIn(){
@@ -411,4 +421,45 @@ angular.module('starter.services', ['starter.config'])
   function setWorkouts(workouts) {
     localStorage.workout = JSON.stringify(workouts);
   }
+})
+
+
+.factory('HealthService', function($http, AppConfig) {
+  var service = {};
+  if(AppConfig.apiLocal) { // If the API is set to local, user the Local functions
+    service.GetStats = GetStatsLocal;
+  } else { // else use the actual API functions.
+    service.GetStats = GetStats;
+  }
+  return service;
+
+  // API Service Functions
+  function GetStats(username) { //getHealthStats
+    return $http.get(AppConfig.apiUrl + AppConfig.getHealthStats + username).then(handleSuccess, handleError);
+  }
+
+  function handleSuccess(response) {
+    return { success:true, code:response.status, data: response.data };
+  }
+
+  function handleError(response) {
+    return { success: false, code:response.status , data: response.statusText };
+  }
+
+  // Local Service Functions
+  function GetStatsLocal() {
+    var stats = {
+      Dia:{min:0,max:0},
+      HDL:{min:0,max:0},
+      HR:{min:0,max:0},
+      LDL:{min:0,max:0},
+      Sys:{min:0,max:0},
+      Tri:{min:0,max:0}
+    };
+    var deferred = $q.defer();
+    deferred.resolve(stats);
+    return deferred.promise;
+  }
 });
+
+

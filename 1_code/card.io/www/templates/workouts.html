@@ -18,7 +18,8 @@
         <h2 class="first-letter">{{item.workout_type}}</h2>
         <p>{{formatDate(item.workout_timestamp)}}</p>
       </ion-item>
-      <a class="item item-body" href="#/app/workouts/{{item.workout_id}}">
+      <!-- <a class="item item-body" href="#/app/workouts/{{item.workout_id}}"> -->
+      <ion-item class="item-body">
         <!-- <img class="full-image" src="{{item.gmap}}"> -->
         <p>
            {{item.comments || 'Comment goes here...'}}
@@ -29,7 +30,8 @@
           <b>Pace: </b>{{formatPace(item.pace)}}<br/>
           <b>Calories: </b>{{formatCalories(item.calories)}}
         </p>
-      </a>
+      </item-body>
+      <!-- </a> -->
     </ion-list>
   </ion-content>
 </ion-view>
