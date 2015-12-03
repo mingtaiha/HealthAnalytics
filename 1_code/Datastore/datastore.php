@@ -165,6 +165,11 @@ class datastore
 			$pstmt=$this->db->prepare('SELECT * FROM '.$val.' WHERE state=?');
 			$pstmt->execute([$state]);
 			while($rs=$pstmt->fetch(PDO::FETCH_ASSOC)){
+				foreach($rs as $key2=>$val2){
+					if($key2!='state'){
+						$rs[$key2]=(float)$val2;
+					}
+				}
 				$data[$val][]=$rs;
 			}
 		}
