@@ -32,7 +32,7 @@ for state in range(len(state_abb)):
 	df.pop('Unnamed: 0')
 
 	total_value = float(len(df.index))
-	unique = df['Gender'].unique()
+	unique = ['M', 'F']
 
 	tmpList = []
 
@@ -58,7 +58,7 @@ for state in range(len(state_abb)):
 	df.pop('Unnamed: 0')
 
 	total_value = float(len(df.index))
-	unique = df['Ethnicity'].unique()
+	unique = ['WhiteNonHisp', 'Hisp', 'Black', 'Asian', 'NavAm', 'PacIs', 'Mixed', 'Other']
 
 	tmpList = []
 
@@ -71,6 +71,7 @@ for state in range(len(state_abb)):
 df_out = pd.DataFrame(ethni, index=state_abb)
 df_out.columns = unique
 df_out.to_csv('Ethnicity_Summary.csv')
+
 
 predictor = ['Age_years', 'Height', 'Waist', 'Weight', 'BMI', 'WtHR', 'HR', \
 			'Avg_Sys', 'Avg_Dia', 'Tri', 'LDL', 'HDL']
