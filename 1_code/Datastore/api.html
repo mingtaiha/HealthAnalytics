@@ -17,6 +17,7 @@
 				<a href="#addWorkout">addWorkout</a>
 			</td>
 			<td>
+				<a href="#getAggregatedHealthStats">getAggregatedHealthStats</a><br>
 				<a href="#getEthnicities">getEthnicities</a><br>
 				<a href="#getFood">getFood</a><br>
 				<a href="#getFoodAll">getFoodAll</a><br>
@@ -177,6 +178,37 @@
 			</td>
 		</tr>
 	</table>
+
+	<a name="getAggregatedHealthStats" />
+	<table>
+		<tr><td colspan="2" class="functionName">getAggregatedHealthStats</td></tr>
+		<tr>
+			<td class="b">URL</td>
+			<td>/getAggregatedHealthStats/:state</td>
+		</tr>
+		<tr>
+			<td class="b">Method</td>
+			<td>GET or POST</td>
+		</tr>
+		<tr>
+			<td class="b">URL Params</td>
+			<td>
+				<i>None</i>
+			</td>
+		</tr>
+		<tr>
+			<td class="b">Success</td>
+			<td>Code:200<br>Content: A JSON string containing all aggregated health stats for a state</td>
+		</tr>
+		<tr>
+			<td class="b">Failure</td>
+			<td>
+				Code 400: You must provide the State
+			</td>
+		</tr>
+	</table>
+
+
 	<a name="getEthnicities" />
 	<table>
 		<tr><td colspan="2" class="functionName">getEthnicities</td></tr>

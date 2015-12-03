@@ -157,10 +157,24 @@ class datastore
 		catch(PDOException $e){throw new DatastoreException('Unable to save workout',1);}
 	}
 
+	public function getAggregatedHealthStats($state){
+		if(empty($state)){throw new DatastoreException('You must provide the State',5);}
+		$data=[];
+		$tbls=['age_summary','bmi_summary','dia_summary','ethnicity_summary','gender_summary','hdl_summary','height_summary','hr_summary','ldl_summary','sys_summary','tri_summary','waist_summary','weight_summary','wthr_summary'];
+		foreach($tbls as $key=>$val){
+			$pstmt=$this->db->prepare('SELECT * FROM '.$val.' WHERE state=?');
+			$pstmt->execute([$state]);
+			while($rs=$pstmt->fetch(PDO::FETCH_ASSOC)){
+				$data[$val][]=$rs;
+			}
+		}
+		return json_encode($data);
+	}
+
 	public function getEthnicities($authtoken){
 		try{
 			$eth=[];
-			$stmt=$this->db->query('SELECT * FROM `ethnicities` ORDER BY ethnicity');
+			$stmt=$this->db->query('SELECT * FROM ethnicities ORDER BY ethnicity');
 			while($rs=$stmt->fetch(PDO::FETCH_ASSOC)){
 				$eth[]=$rs;
 			}

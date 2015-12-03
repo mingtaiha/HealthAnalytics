@@ -72,6 +72,9 @@ class api
 			case 'addFood':
 				$retval=$this->datastore->addFood($this->requestVars['authtoken'],$this->requestVars['food'],$this->requestVars['serving'],$this->requestVars['meal'],$this->requestVars['food_timestamp'],$this->requestVars['comments']);
 			break;
+			case 'getAggregatedHealthStats':
+				$retval=$this->datastore->getAggregatedHealthStats($this->furl_id);
+			break;
 			case 'getEthnicities':
 				$retval=$this->datastore->getEthnicities($this->requestVars['authtoken']);
 			break;
