@@ -31,7 +31,7 @@ You will need the following things properly installed on your computer.
 
 ### Run on device
 
-* `ionic run -- <platform>`
+* `ionic run --device <platform>`
 
 *Note: * You need a device plugged into the machine and have the right libraries installed. 
 
