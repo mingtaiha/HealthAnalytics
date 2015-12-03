@@ -5,11 +5,56 @@
   </ion-nav-title>
 
   <ion-content>
+
     <ion-list type="list-inset">
-      <ion-item class="item-icon-left">
-      <i class="icon ion-android-alert"></i>
-        Area under construction
+      <ion-item class="item-divider">
+        Heart Rate Range
+      </ion-item>
+      <ion-item>
+        <p><b>{{getStatDisplayDetails('hr').text}}: </b></p>
+        <p>Max: {{formatValue(stats.HR.max)}} <small>{{getStatDisplayDetails('hr').units}}</small></p>
+        <p>Min: {{formatValue(stats.HR.min)}} <small>{{getStatDisplayDetails('hr').units}}</small></p>
       </ion-item>
     </ion-list>
+
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Cholesterol Range
+      </ion-item>
+      <ion-item>
+        <p><b>{{getStatDisplayDetails('chol').text}}: </b></p>
+        <p>Max: {{totalCholesterol(stats.LDL.max, stats.HDL.max, stats.Tri.max)}} <small>{{getStatDisplayDetails('chol').units}}</small></p>
+        <p>Min: {{totalCholesterol(stats.LDL.min, stats.HDL.min, stats.Tri.min)}} <small>{{getStatDisplayDetails('chol').units}}</small></p><br/>
+        <p><b>{{getStatDisplayDetails('tri').text}}: </b></p>
+        <p>Max: {{formatValue(stats.Tri.max)}} <small>{{getStatDisplayDetails('tri').units}}</small></p>
+        <p>Min: {{formatValue(stats.Tri.min)}} <small>{{getStatDisplayDetails('tri').units}}</small></p><br/>
+        <p><b>{{getStatDisplayDetails('HDL').text}}: </b></p>
+        <p>Max: {{formatValue(stats.HDL.max)}} <small>{{getStatDisplayDetails('HDL').units}}</small></p>
+        <p>Min: {{formatValue(stats.HDL.min)}} <small>{{getStatDisplayDetails('HDL').units}}</small></p><br/>
+        <p><b>{{getStatDisplayDetails('LDL').text}}: </b></p>
+        <p>Max: {{formatValue(stats.LDL.max)}} <small>{{getStatDisplayDetails('LDL').units}}</small></p>
+        <p>Min: {{formatValue(stats.LDL.min)}} <small>{{getStatDisplayDetails('LDL').units}}</small></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Blood Pressure
+      </ion-item>
+      <ion-item>
+        <p><b>Combined: </b></p>
+        <p>Max: {{formatIntValue(stats.Sys.max)}}/{{formatIntValue(stats.Dia.max)}} <small>{{getStatDisplayDetails('bp').units}}</small></p>
+        <p>Min: {{formatIntValue(stats.Sys.min)}}/{{formatIntValue(stats.Dia.min)}} <small>{{getStatDisplayDetails('bp').units}}</small></p><br/>
+        <p><b>{{getStatDisplayDetails('Sys').text}}: </b></p>
+        <p>Max: {{formatIntValue(stats.Sys.max)}} <small>{{getStatDisplayDetails('Sys').units}}</small></p>
+        <p>Min: {{formatIntValue(stats.Sys.min)}} <small>{{getStatDisplayDetails('Sys').units}}</small></p><br/>
+        <p><b>{{getStatDisplayDetails('Dia').text}}: </b></p>
+        <p>Max: {{formatIntValue(stats.Dia.max)}} <small>{{getStatDisplayDetails('Dia').units}}</small></p>
+        <p>Min: {{formatIntValue(stats.Dia.min)}} <small>{{getStatDisplayDetails('Dia').units}}</small></p>
+      </ion-item>
+
+    </ion-list>
+
   </ion-content>
 </ion-view>

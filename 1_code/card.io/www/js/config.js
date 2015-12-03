@@ -30,6 +30,9 @@ angular.module('starter.config', [])
   'getWorkoutApi': 'getWorkout/',
   'addWorkoutApi': 'addWorkout/',
 
+  // Health Stats API
+  'getHealthStats': 'getHealthStats/',
+
   /* Should we use local API or use the server? 'true' for local, 'false' for server */
   'apiLocal': false
   

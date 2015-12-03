@@ -27,6 +27,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   if ($rootScope.globals.currentUser) {
     $http.defaults.headers.common['AuthToken'] = $rootScope.globals.currentUser.authdata; // jshint ignore:line
   }
+  // Conver string date to date object
+  if ($rootScope.globals.currentUser && $rootScope.globals.currentUser.user) {
+    $rootScope.globals.currentUser.user.birth_date = moment($rootScope.globals.currentUser.user.birth_date).toDate();
+  }
 
   $rootScope.$on('$locationChangeStart', function (event, next, current) {
     // redirect to login page if not logged in and trying to access a restricted page
@@ -65,7 +69,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     url: '/home',
     views: {
       'menuContent': {
-        templateUrl: 'templates/home.html'
+        templateUrl: 'templates/home.html',
+        controller: 'HealthCtrl'
       }
     }
   })
@@ -98,6 +103,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       'menuContent': {
         templateUrl: 'templates/addWorkout.html',
         controller: 'AddWorkoutCtrl'
+      }
+    }
+  })
+
+  .state('app.recordWorkout', {
+    cache: false,
+    url: '/record/workout',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/recordWorkout.html',
       }
     }
   })

@@ -74,6 +74,10 @@ angular.module('starter.controllers', ['starter.services'])
     return AuthenticationService.IsLoggedIn();
   }
 
+  $scope.getCurrentUser = function() {
+    return AuthenticationService.CurrentUser().user;
+  }
+
   // Logs out...
   $scope.doLogOut = function() {
     AuthenticationService.Logout();
@@ -81,24 +85,12 @@ angular.module('starter.controllers', ['starter.services'])
     $location.path('app/login');
   }
 
-  // Watch for the set current user and update the birthdate.
-  $scope.$watch( $scope.isUserLogged , function ( isUserLogged ) {
-    if(isUserLogged) { // If loggedin == true get the user from the user-service
-      UserService.GetByUsername(AuthenticationService.CurrentUser().username).then(function (response){
-        if(response.success) { // if user service response == true set the user variable
-          $scope.currentUser = response.data;
-          if($scope.currentUser && $scope.currentUser.birth_date) {
-            $scope.currentUser.birth_date =  moment($scope.currentUser.birth_date).toDate(); // convert date object
-          }
-        } else { // else service response == false clear the user variable
-          $scope.currentUser = {};
-        }
-      });
-    } else { // else loggedin == false clear the user variable
-      $scope.currentUser = {};
-    }
-    
+    // Watch for the set current user everytime it changes 
+    // in the authentication service.
+  $scope.$watch( 'getCurrentUser()' , function ( newValue, oldValue ) {
+    $scope.currentUser = newValue; 
   });
+
 })
 
 
@@ -179,44 +171,76 @@ angular.module('starter.controllers', ['starter.services'])
 
 // Controller for the 'profle.html' template.
 // Displays and edits the user's profile.
-.controller('ProfileCtrl', function($scope, $rootScope, AuthenticationService, UserService) {
+.controller('ProfileCtrl', function($scope, $rootScope, $ionicPopup, AuthenticationService, UserService) {
   $scope.username = AuthenticationService.CurrentUser().username;
   $scope.editing = false;
+  $scope.isUserDataHasChanges = false;
+  $scope.userProfile = $scope.currentUser; // get it from the cache...
 
   // Load the scope data before enetering the view...
   $scope.$on('$ionicView.beforeEnter', function(){
-    UserService.GetByUsername($scope.username).then(function (response){
+    if ( !$scope.userProfile ) { // if the profile was empty, fill it
+      UserService.GetByUsername($scope.username).then(function (response){
       if (response.success) {
-        $scope.currentUser = response.data;
-        $scope.currentUser.gender = $scope.currentUser.gender.toLowerCase(); // send gender to lowercase....
-        $scope.currentUser.birth_date = moment($scope.currentUser.birth_date).toDate(); // convert date object
+        var user = response.data;
+        user.gender = user.gender.toLowerCase(); // send gender to lowercase....
+        user.birth_date = moment(user.birth_date).toDate(); // convert date object
+        $scope.userProfile = user;
       }
     });
+    }
   });
+
+   // Set the watch of the variable
+  // This checks for dirty-ness
+  $scope.$watch('userProfile', function (newValue, oldValue) {
+    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+      $scope.isUserDataHasChanges = true;
+    }
+  }, true);
 
   // Perform the login action when the user submits the login form
   $scope.toggleEdit = function() {
-    $scope.editing = !$scope.editing;
-    if ($scope.editing) {
-      console.log('Edit Profile ...');
-    } else {
-      console.log('Edit Profile Done ...');
-    }
-    
+    $scope.editing = true;
   };
 
   // Perform the login action when the user submits the login form
   $scope.saveProfile = function() {
-    console.log('do nothing...');
+    if ($scope.editing && $scope.isUserDataHasChanges) {
+      UserService.Update($scope.userProfile).then(function (response){
+        if (response.success) { // update success
+
+          // A success alert dialog
+          $ionicPopup.alert({
+            title: 'User Update Success!',
+            template: response.data.results
+          });
+
+          // Get the user from the server again and update currentUser + userProfile...
+          UserService.GetByUsername($scope.username).then(function (resp) {
+            if(resp.success) {
+              var user = resp.data;
+              user.gender = user.gender.toLowerCase(); // send gender to lowercase....
+              user.birth_date = moment(user.birth_date).toDate(); // convert date object
+              AuthenticationService.SetCurrentUser(user);
+              $scope.userProfile = user;
+              $scope.editing = false; // done editing...
+              $scope.isUserDataHasChanges = false; // user was updated, forcing false...
+            }
+          });
+        } else {
+          // An alert dialog
+          $ionicPopup.alert({
+            title: 'User Update Failed.',
+            template: response.data
+          });
+        }
+      });
+    } else {
+      $scope.editing = false;
+    }
   };
 
-})
-
-
-// Controller for the 'settings.html' template.
-// Used for allowing users (future teams) to change the 
-// URL of the application, etc...
-.controller('SettingsCtrl', function($scope, $stateParams) {
 })
 
 
@@ -567,8 +591,97 @@ angular.module('starter.controllers', ['starter.services'])
     ]
   */
 
-});
+})
 
+// Controller for the 'home.html' template
+// Gets health stats and displays them.
+// BP is always systolic/diastolic
+// The total cholesterol = LDL + HDL + (Tri / 5)
+.controller('HealthCtrl', function($scope, $stateParams, AuthenticationService, HealthService) {
+  $scope.username = AuthenticationService.CurrentUser().username;
+  $scope.statsText = {
+    hr:{text:'Beats Per Minute', units: 'bpm'},
+    chol: {text:'Total', units:'mg/dL'},
+    tri:{text:'Trig', units: 'mg/dL'},
+    hdl:{text:'HDL', units: 'mg/dL'},
+    ldl:{text:'LDL', units: 'mg/dL'},
+    bp: {text:'Blood Preassure', units: 'mmHg'},
+    sys:{text:'Systolic', units: 'mmHg'},
+    dia:{text:'Diastolic', units: 'mmHg'}
+  };
+
+  // Health stats template
+  $scope.stats = {
+      Dia:{min:0,max:0},
+      HDL:{min:0,max:0},
+      HR:{min:0,max:0},
+      LDL:{min:0,max:0},
+      Sys:{min:0,max:0},
+      Tri:{min:0,max:0}
+    };
+
+  // Load the scope data before enetering the view...
+  $scope.$on('$ionicView.beforeEnter', function(){
+    HealthService.GetStats($scope.username).then(function (response){
+      if (response.success) {
+        $scope.stats = response.data;
+      }
+    });
+  });
+
+  $scope.getStatDisplayDetails = function(statLabel) {
+    return $scope.statsText[statLabel.toLowerCase()];
+  }
+
+  // Format the display of values to two decimal points (xx.00)
+  $scope.formatValue = function(floatValue) {
+    if(floatValue.toString()) { // if the value is not undefined
+      return parseFloat(floatValue).toFixed(2);
+    } else {
+      return floatValue;
+    }
+  }
+
+  // Format the display of integer values.
+  $scope.formatIntValue = function(value) {
+    if(value.toString()) { // if the value is not undefined
+      return parseInt(value);
+    } else {
+      return value;
+    }
+  }
+
+  // Get the total cholesterol using the formula
+  // total cholesterol = LDL + HDL + (Tri / 5)
+  $scope.totalCholesterol = function(ldl, hdl, tri) {
+    if(ldl.toString() && hdl.toString() && tri.toString()) { // if the value are not undefined
+      var LDL = parseFloat(ldl);
+      var HDL = parseFloat(hdl);
+      var Tri = parseFloat(tri);
+      return parseFloat(LDL + HDL + (Tri / 5.0)).toFixed(2);
+    } else {
+      return 0.00;
+    }
+  }
+
+  /*
+    Health Stats Example:
+    {
+      Dia:{min:0,max:0},
+      HDL:{min:0,max:0},
+      HR:{min:0,max:0},
+      LDL:{min:0,max:0},
+      Sys:{min:0,max:0},
+      Tri:{min:0,max:0}
+    }
+  */
+})
+
+// Controller for the 'settings.html' template.
+// Used for allowing users (future teams) to change the 
+// URL of the application, etc...
+.controller('SettingsCtrl', function($scope, $stateParams) {
+});
 
 
 /*
