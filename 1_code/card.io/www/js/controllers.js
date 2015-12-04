@@ -752,17 +752,18 @@ angular.module('starter.controllers', ['ionic', 'starter.services'])
           $scope.totalPopulation = agStats.population_summary[0]['population'];
 
           // Generate all Histographs
-          $scope.createHistogram('age',agStats.age_summary[0]);
-          $scope.createHistogram('bmi',agStats.bmi_summary[0]);
-          $scope.createHistogram('weight',agStats.weight_summary[0]);
-          $scope.createHistogram('height',agStats.height_summary[0]);
-          $scope.createHistogram('waist',agStats.waist_summary[0]);
-          $scope.createHistogram('hr',agStats.hr_summary[0]);
-          $scope.createHistogram('tri',agStats.tri_summary[0]);
-          $scope.createHistogram('hdl',agStats.hdl_summary[0]);
-          $scope.createHistogram('ldl',agStats.ldl_summary[0]);
-          $scope.createHistogram('sys',agStats.sys_summary[0]);
-          $scope.createHistogram('dia',agStats.dia_summary[0]);
+          $scope.createHistogram('age', 'years', agStats.age_summary[0]);
+          $scope.createHistogram('bmi', 'kg/m^2', agStats.bmi_summary[0]);
+          $scope.createHistogram('weight', 'kg', agStats.weight_summary[0]);
+          $scope.createHistogram('height', 'cm', agStats.height_summary[0]);
+          $scope.createHistogram('waist', 'cm', agStats.waist_summary[0]);
+          $scope.createHistogram('hr', 'bpm', agStats.hr_summary[0]);
+          $scope.createHistogram('tri', 'mg/dL', agStats.tri_summary[0]);
+          $scope.createHistogram('hdl', 'mg/dL', agStats.hdl_summary[0]);
+          $scope.createHistogram('ldl', 'mg/dL', agStats.ldl_summary[0]);
+          $scope.createHistogram('sys', 'mmHg', agStats.sys_summary[0]);
+          $scope.createHistogram('dia', 'mmHg', agStats.dia_summary[0]);
+          $scope.createHistogram('wthr', 'ratio', agStats.wthr_summary[0]);
 
           // Generate all Pie Charts
            var stats = [{key:'male', value: agStats.gender_summary[0].male}, {key:'female', value: agStats.gender_summary[0].female}];
@@ -795,26 +796,28 @@ angular.module('starter.controllers', ['ionic', 'starter.services'])
   }
 
   // Created a histogram from the aggregate data that comes from the server
-  $scope.createHistogram = function(label, stats) {
+  $scope.createHistogram = function(label, units, stats) {
     
     // Bin information
     // Bin Size == max-min / 20
     var binsize = (stats.max - stats.min) / $scope.numbins
 
     // Set the limits of the x axis
-    var xmin = stats.min - 1
-    var xmax = stats.max + 1
+    var xmin = stats.min;
+    var xmax = stats.max;
     
     var data = new Array($scope.numbins);
     for (var i = 0; i < $scope.numbins; i++) {
       data[i] = { numfill: parseFloat(stats['bin' + (i+1)]).toFixed(5) };
     }
 
+    console.log(data);
+
     // A formatter for counts.
     var formatCount = d3.format("%");
 
-    var margin = {top: 10, right: 65, bottom: 20, left: 40},
-        binmargin = .2,
+    var margin = {top: 10, right: 65, bottom: 50, left: 40},
+        binmargin = binsize * 0.05,
         width = $scope.dev_width - margin.left - margin.right,
         height = parseInt($scope.dev_height / 3) - margin.top - margin.bottom;
 
@@ -863,6 +866,7 @@ angular.module('starter.controllers', ['ionic', 'starter.services'])
         .attr("x", x(binmargin))
         .attr("width", x(binsize - 2 * binmargin))
         .attr("height", function(d) { return height - y(d.numfill); });
+    console.log(binsize);
 
 
     // add the x axis and x-label
@@ -870,19 +874,24 @@ angular.module('starter.controllers', ['ionic', 'starter.services'])
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
-    bar.append("text")
+    svg.append("text")
         .attr("class", "xlabel")
         .attr("text-anchor", "middle")
-        .attr("dy", ".75em")
-        .attr("x", width / 2)
-        .attr("y", height + margin.bottom)
-        .text('Age distribution');
+        .attr("transform", "translate(" + (width / 2) + " ," + (height + 40) + ")") // margin.bottom
+        .text(units);
 
     // add the y axis and y-label
     svg.append("g")
         .attr("class", "y axis")
         .attr("transform", "translate(0,0)")
         .call(yAxis);
+    svg.append("text")
+        .attr("class", "ylabel")
+        .attr("y", 0 - margin.left) // x and y switched due to rotation
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .attr("transform", "rotate(-90)")
+        .style("text-anchor", "middle");
   }
 
   // Creates a Pie Chart with data that comes from the server
