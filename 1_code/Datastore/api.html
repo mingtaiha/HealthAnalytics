@@ -17,10 +17,13 @@
 				<a href="#addWorkout">addWorkout</a>
 			</td>
 			<td>
+				<a href="#getAggregatedHealthStats">getAggregatedHealthStats</a><br>
+				<a href="#getEthnicities">getEthnicities</a><br>
 				<a href="#getFood">getFood</a><br>
 				<a href="#getFoodAll">getFoodAll</a><br>
 				<a href="#getFoodList">getFoodList</a><br>
 				<a href="#getFoodUser">getFoodUser</a><br>
+				<a href="#getHealthStats">getHealthStats</a><br>
 				<a href="#getUser">getUser</a><br>
 				<a href="#getUserAll">getUserAll</a><br>
 				<a href="#getWorkout">getWorkout</a><br>
@@ -53,7 +56,7 @@
 				food=[int]<br>
 				serving=[float(4,2)]<br>
 				meal=[string(25)]<br>
-				food_timestampe=[UTC formatted date]<br>
+				food_timestamp=[UTC formatted date]<br>
 				comments=[string(255)] <i>optional</i>
 			</td>
 		</tr>
@@ -78,7 +81,7 @@
 		<tr><td colspan="2" class="functionName">addUser</td></tr>
 		<tr>
 			<td class="b">URL</td>
-			<td>/addUser/:email?password=:password&amp;fname=:fname&amp;lname=:lname&amp;mi=:mi&amp;weight=:weight&amp;height=:height&amp;birth_date=:birth_date&amp;gender=:gender&amp;waist_size=:waist_size&amp;address1=:address1&amp;address2=:address2&amp;city=:city&amp;state=:state&amp;zip=:zip</td>
+			<td>/addUser/:email?password=:password&amp;fname=:fname&amp;lname=:lname&amp;mi=:mi&amp;weight=:weight&amp;height=:height&amp;birth_date=:birth_date&amp;<br>gender=:gender&amp;waist_size=:waist_size&amp;address1=:address1&amp;address2=:address2&amp;city=:city&amp;state=:state&amp;zip=:zip&amp;ethnicity=:ethnicity</td>
 		</tr>
 		<tr>
 			<td class="b">Method</td>
@@ -100,7 +103,8 @@
 				state=[string(2)]<br>
 				waist_size=[int] <i>inches</i><br>
 				weight=[int] <i>pounds</i><br>
-				zip=[string(10)]
+				zip=[string(10)]<br>
+				ethnicity=[string(12)]
 			</td>
 		</tr>
 		<tr>
@@ -123,6 +127,7 @@
 				Code 400: You must provide the City<br>
 				Code 400: You must provide the State<br>
 				Code 400: You must provide the Zip Code<br>
+				Code 400: You must provide the Ethnicity<br>
 				Code 400: Invalid Height<br>
 				Code 400: Invalid Weight<br>
 				Code 400: Invalid Waist Line<br>
@@ -170,6 +175,63 @@
 				Code 400: Invalid Workout Calories<br>
 				Code 400: Invalid Workout Pace<br>
 				Code 500: Unable to create workout<br>
+			</td>
+		</tr>
+	</table>
+
+	<a name="getAggregatedHealthStats" />
+	<table>
+		<tr><td colspan="2" class="functionName">getAggregatedHealthStats</td></tr>
+		<tr>
+			<td class="b">URL</td>
+			<td>/getAggregatedHealthStats/:state</td>
+		</tr>
+		<tr>
+			<td class="b">Method</td>
+			<td>GET or POST</td>
+		</tr>
+		<tr>
+			<td class="b">URL Params</td>
+			<td>
+				<i>None</i>
+			</td>
+		</tr>
+		<tr>
+			<td class="b">Success</td>
+			<td>Code:200<br>Content: A JSON string containing all aggregated health stats for a state</td>
+		</tr>
+		<tr>
+			<td class="b">Failure</td>
+			<td>
+				Code 400: You must provide the State
+			</td>
+		</tr>
+	</table>
+	<a name="getEthnicities" />
+	<table>
+		<tr><td colspan="2" class="functionName">getEthnicities</td></tr>
+		<tr>
+			<td class="b">URL</td>
+			<td>/getEthnicities/?authtoken=:authtoken</td>
+		</tr>
+		<tr>
+			<td class="b">Method</td>
+			<td>GET or POST</td>
+		</tr>
+		<tr>
+			<td class="b">URL Params</td>
+			<td>
+				authtoken=[string(32)]
+			</td>
+		</tr>
+		<tr>
+			<td class="b">Success</td>
+			<td>Code:200<br>Content: A JSON string containing all Ethnicities</td>
+		</tr>
+		<tr>
+			<td class="b">Failure</td>
+			<td>
+				Code 500: Unable to retrieve Ethnicities
 			</td>
 		</tr>
 	</table>
@@ -264,7 +326,6 @@
 			</td>
 		</tr>
 	</table>
-
 	<a name="getFoodUser" />
 	<table>
 		<tr><td colspan="2" class="functionName">getFoodUser</td></tr>
@@ -295,8 +356,50 @@
 			<td>You can only access your own userfood records</td>
 		</tr>
 	</table>
-
-
+	<a name="getHealthStats" />
+	<table>
+		<tr><td colspan="2" class="functionName">getHealthStats</td></tr>
+		<tr>
+			<td class="b">URL</td>
+			<td>
+				/getHealthStats/?authtoken=:authtoken&amp;age=:age&amp;height=:height&amp;weight=:weight&amp;gender=:gender&amp;waist_size=:waist_size&amp;state=:state&amp;ethnicites=:ethnicities<br>
+				<span style="color:blue">/getHealthStats/:email/?authtoken=:authtoken</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="b">Method</td>
+			<td>GET or POST</td>
+		</tr>
+		<tr>
+			<td class="b">URL Params</td>
+			<td>
+				authtoken=[string(32)]<br>
+				age=[int]<br>
+				gender=[string(1)]<br>
+				height=[int] <i>inches</i><br>
+				state=[string(2)]<br>
+				waist_size=[int] <i>inches</i><br>
+				weight=[int] <i>pounds</i><br>
+				<span style="color:blue">authtoken=[string(32)]</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="b">Success</td>
+			<td>
+				Code:200<br>JSON string containing Health Stats<br>
+				<span style="color:blue">Code:200<br>JSON string containing Health Stats for user specified by email</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="b">Failure</td>
+			<td>
+				<span style="color:blue;">
+					Code 404: User stats not found<br>
+					Code 500: Unable to fetch user stats
+				</span>
+			</td>
+		</tr>
+	</table>
 	<a name="getUser" />
 	<table>
 		<tr><td colspan="2" class="functionName">getUser</td></tr>

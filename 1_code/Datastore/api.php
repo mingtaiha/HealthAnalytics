@@ -64,13 +64,19 @@ class api
 		$retval='';
 		switch($this->furl_function){
 			case 'addUser':
-				$retval=$this->datastore->addUser($this->requestVars['fname'],$this->requestVars['lname'],$this->furl_id,$this->requestVars['password'],$this->requestVars['mi'],$this->requestVars['weight'],$this->requestVars['height'],$this->requestVars['birth_date'],$this->requestVars['gender'],$this->requestVars['waist_size'],$this->requestVars['address1'],$this->requestVars['address2'],$this->requestVars['city'],$this->requestVars['state'],$this->requestVars['zip']);
+				$retval=$this->datastore->addUser($this->requestVars['fname'],$this->requestVars['lname'],$this->furl_id,$this->requestVars['password'],$this->requestVars['mi'],$this->requestVars['weight'],$this->requestVars['height'],$this->requestVars['birth_date'],$this->requestVars['gender'],$this->requestVars['waist_size'],$this->requestVars['address1'],$this->requestVars['address2'],$this->requestVars['city'],$this->requestVars['state'],$this->requestVars['zip'],$this->requestVars['ethnicity']);
 			break;
 			case 'addWorkout':
 				$retval=$this->datastore->addWorkout($this->requestVars['authtoken'],$this->requestVars['workout_type'],$this->requestVars['distance'],$this->requestVars['duration'],$this->requestVars['workout_timestamp'],$this->requestVars['calories'],$this->requestVars['comments']);
 			break;
 			case 'addFood':
 				$retval=$this->datastore->addFood($this->requestVars['authtoken'],$this->requestVars['food'],$this->requestVars['serving'],$this->requestVars['meal'],$this->requestVars['food_timestamp'],$this->requestVars['comments']);
+			break;
+			case 'getAggregatedHealthStats':
+				$retval=$this->datastore->getAggregatedHealthStats($this->furl_id);
+			break;
+			case 'getEthnicities':
+				$retval=$this->datastore->getEthnicities($this->requestVars['authtoken']);
 			break;
 			case 'getFood':
 				$retval=$this->datastore->getFood($this->requestVars['authtoken'],$this->furl_id);
@@ -85,7 +91,9 @@ class api
 				$retval=$this->datastore->getFoodUser($this->requestVars['authtoken'],$this->furl_id);
 			break;
 			case 'getHealthStats':
-				$retval=$this->datastore->getHealthStats($this->requestVars['authtoken'],$this->requestVars['age'],$this->requestVars['height'],$this->requestVars['weight'],$this->requestVars['waist_size'],$this->requestVars['gender'],$this->requestVars['ethnicity'],$this->requestVars['state']);
+				$email='';
+				if(!empty($this->furl_id)){$email=$this->furl_id;}
+				$retval=$this->datastore->getHealthStats($this->requestVars['authtoken'],$this->requestVars['age'],$this->requestVars['height'],$this->requestVars['weight'],$this->requestVars['waist_size'],$this->requestVars['gender'],$this->requestVars['ethnicity'],$this->requestVars['state'],$email);
 			break;
 			case 'getUser':
 				$retval=$this->datastore->getUser($this->furl_id,$this->requestVars['authtoken']);
@@ -109,7 +117,7 @@ class api
 				$retval=$this->datastore->logoutUser($this->requestVars['authtoken'],$this->furl_id);
 			break;
 			case 'updateUser':
-				$retval=$this->datastore->updateUser($this->requestVars['fname'],$this->requestVars['lname'],$this->furl_id,$this->requestVars['mi'],$this->requestVars['weight'],$this->requestVars['height'],$this->requestVars['birth_date'],$this->requestVars['gender'],$this->requestVars['waist_size'],$this->requestVars['address1'],$this->requestVars['address2'],$this->requestVars['city'],$this->requestVars['state'],$this->requestVars['zip'],$this->requestVars['authtoken']);
+				$retval=$this->datastore->updateUser($this->requestVars['fname'],$this->requestVars['lname'],$this->furl_id,$this->requestVars['mi'],$this->requestVars['weight'],$this->requestVars['height'],$this->requestVars['birth_date'],$this->requestVars['gender'],$this->requestVars['waist_size'],$this->requestVars['address1'],$this->requestVars['address2'],$this->requestVars['city'],$this->requestVars['state'],$this->requestVars['zip'],$this->requestVars['authtoken'],$this->requestVars['ethnicity']);
 			break;
 			default:
 				throw new apiException('function not found',1);
