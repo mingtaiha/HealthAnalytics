@@ -46,8 +46,49 @@ angular
         templateUrl: 'views/contact.html',
         controller: 'ContactCtrl',
         controllerAs: 'contact'
+      }).when('/registration', {
+        templateUrl: 'views/registration.html',
+        controller: 'RegistrationCtrl',
+        controllerAs: 'regis'
       })
       .otherwise({
         redirectTo: '/'
       });
-  });
+  }).constant('AppConfig', {
+  'version': '0.1',
+
+  /* The api server url */
+  'apiUrl': 'http://www.rugatech.com/se1/api/',
+
+  /* All apis should end in a slash '/' */
+
+  // Authentication
+  'loginUserApi': 'loginUser/',
+  'logoutUserApi': 'logoutUser/',
+
+  // User API
+  'getUserApi': 'getUser/',
+  'addUserApi': 'addUser/',
+  'updateUserApi': 'updateUser/',
+  'deleteUserApi': 'deleteUser/',
+
+  // Food API
+  'getFoodListApi': 'getFoodList/',
+  'getFoodAllApi': 'getFoodAll/',
+  'getFoodUserApi': 'getFoodUser/',
+  'getFoodApi': 'getFood/',
+  'addFoodApi': 'addFood/',
+
+  // Workout API
+  'getWorkoutAllApi': 'getWorkoutAll/',
+  'getWorkoutUserApi': 'getWorkoutUser/',
+  'getWorkoutApi': 'getWorkout/',
+  'addWorkoutApi': 'addWorkout/',
+
+  // Health Stats API
+  'getHealthStats': 'getHealthStats/',
+
+  /* Should we use local API or use the server? 'true' for local, 'false' for server */
+  'apiLocal': false
+
+});
