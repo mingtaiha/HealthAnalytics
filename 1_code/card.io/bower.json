@@ -8,6 +8,7 @@
     "ngCordova": "~0.1.20-alpha",
     "angular-cookies": "~1.4.7",
     "moment": "~2.10.6",
-    "angular-md5": "~0.1.8"
+    "angular-md5": "~0.1.8",
+    "d3": "~3.5.10"
   }
 }

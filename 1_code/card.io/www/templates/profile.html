@@ -7,15 +7,15 @@
     <form ng-submit="saveProfile()">
       <div class="list list-inset">
         <label class="item item-input">
-          <span class="input-label">First Name</span>
+          <span class="input-label">First Name <span class="assertive">*</span></span>
           <input type="text" placeholder="John" ng-readonly="!editing" ng-model="userProfile.fname">
         </label>
         <label class="item item-input">
-          <span class="input-label">Last Name</span>
+          <span class="input-label">Last Name <span class="assertive">*</span></span>
           <input type="text" placeholder="Shepard" ng-readonly="!editing" ng-model="userProfile.lname">
         </label>
         <label class="item item-input">
-          <span class="input-label">Email</span>
+          <span class="input-label">Email <span class="assertive">*</span></span>
           <input type="email" placeholder="john.shepard@N7.com" ng-readonly="true" ng-model="userProfile.email">
         </label>
       <!--
@@ -25,11 +25,11 @@
         </label>
       -->
         <label class="item item-input">
-          <span class="input-label">Birth Date</span>
+          <span class="input-label">Birth Date <span class="assertive">*</span></span>
           <input type="date" placeholder="yyyy-MM-dd" ng-readonly="!editing" ng-model="userProfile.birth_date">
         </label>
         <label class="item item-input">
-          <span class="input-label">Height</span>
+          <span class="input-label">Height <span class="assertive">*</span></span>
           <input type="number" placeholder="(inches)" ng-readonly="!editing" ng-model="userProfile.height">
         </label>
         <label class="item item-input">
@@ -37,25 +37,18 @@
           <input type="number" placeholder="(inches)" ng-readonly="!editing" ng-model="userProfile.waist_size" required>
         </label>
         <label class="item item-input">
-          <span class="input-label">Weight</span>
+          <span class="input-label">Weight <span class="assertive">*</span></span>
           <input type="number" placeholder="(lbs)" ng-readonly="!editing" ng-model="userProfile.weight">
         </label>
-        <!--
-        <label class="item item-text-wrap item-radio">
-          <input type="radio" name="gender" value="male" ng-disabled="!editing" ng-model="userProfile.gender">
-          <div class="item-content">
-            Male
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Ethnicity <span class="assertive">*</span>
           </div>
-          <i class="radio-icon ion-checkmark"></i>
+          <select ng-model="userProfile.ethnicity" ng-disabled="!editing">
+            <option value="">Select an ethnicity</option>
+            <option ng-selected='{{item.ethnicity_id == userProfile.ethnicity}}' ng-repeat="item in ethnicityList" value="{{item.ethnicity_id}}">{{item.ethnicity}}</option>
+          </select>
         </label>
-        <label class="item item-text-wrap item-radio">
-          <input type="radio" name="gender" value="female" ng-disabled="!editing" ng-model="userProfile.gender">
-          <div class="item-content">
-            Female
-          </div>
-          <i class="radio-icon ion-checkmark"></i>
-        </label>
-        -->
       </div>
 
       <div class="list list-inset">
@@ -86,7 +79,7 @@
             State <span class="assertive">*</span>
           </div>
           <select ng-model="userProfile.state" ng-disabled="!editing">
-            <option value="">Select a State</option>
+            <option value="">Select a state</option>
             <option ng-selected='{{item.value == userProfile.state}}' ng-repeat="item in stateList" value="{{item.value}}">{{item.text}}</option>
           </select>
         </label>

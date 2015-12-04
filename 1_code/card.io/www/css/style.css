@@ -33,3 +33,31 @@
     visibility: visible;
     
   }
+
+
+
+
+  /**
+  Histogram Stuff!
+  */
+
+.graph-bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+.graph-bar rect:hover{
+  fill: rgba(0,0,0,.8);
+}
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}

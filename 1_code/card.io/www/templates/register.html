@@ -45,23 +45,13 @@
           <span class="input-label">Weight <span class="assertive">*</span></span>
           <input type="number" placeholder="(lbs)" ng-model="registerData.weight" required="required">
         </label>
-
-        <!--
-        <label class="item item-text-wrap item-radio">
-          <input type="radio" name="gender" value="male" ng-model="registerData.gender">
-          <div class="item-content">
-            Male
-          </div>
-          <i class="radio-icon ion-checkmark"></i>
+        <label class="item item-input item-select">
+          <span class="input-label">Ethnicity <span class="assertive">*</span></span>
+          <select ng-model="registerData.ethnicity">
+            <option value="" selected>Select an ethnicity</option>
+            <option ng-repeat="item in ethnicityList" value="{{item.ethnicity_id}}">{{item.ethnicity}}</option>
+          </select>
         </label>
-        <label class="item item-text-wrap item-radio">
-          <input type="radio" name="gender" value="female" ng-model="registerData.gender">
-          <div class="item-content">
-            Female
-          </div>
-          <i class="radio-icon ion-checkmark"></i>
-        </label>
-        -->
       </div>
 
       <div class="list list-inset">
@@ -92,7 +82,7 @@
             State <span class="assertive">*</span>
           </div>
           <select ng-model="registerData.state" style="direction: ltr !important;">
-            <option value="" selected>Select a State</option>
+            <option value="" selected>Select a state</option>
             <option ng-repeat="item in stateList" value="{{item.value}}">{{item.text}}</option>
           </select>
         </label>

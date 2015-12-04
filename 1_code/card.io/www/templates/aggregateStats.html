@@ -1,0 +1,142 @@
+<ion-view>
+
+  <ion-nav-title>
+    <h1 class="title">State Statistics</i></h1>
+  </ion-nav-title>
+
+  <ion-content>
+
+
+  <ion-list type="list-inset">
+    <ion-item class="item-input item-select">
+      <div class="input-label">
+        Select a State
+      </div>
+      <select ng-model="selectedData.state">
+        <option value="" selected>Select a state</option>
+        <option ng-repeat="item in stateList" value="{{item.value}}">{{item.text}}</option>
+      </select>
+    </ion-item>
+    <ion-item>
+      <button class="button button-block button-positive" ng-click="generateGraphs()">Get Stats</button
+    </ion-item>
+  </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Total Population
+      </ion-item>
+      <ion-item>
+        {{formatPopulation(totalPopulation)}}
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Gender Statistics
+      </ion-item>
+      <ion-item>
+        <p class="gender-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Age Statistics
+      </ion-item>
+      <ion-item>
+        <p class="age-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Ethnicity Statistics
+      </ion-item>
+      <ion-item>
+        <p class="ethnicity-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Weight Statistics
+      </ion-item>
+      <ion-item>
+        <p class="weight-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Height Statistics
+      </ion-item>
+      <ion-item>
+        <p class="height-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Waist Statistics
+      </ion-item>
+      <ion-item>
+        <p class="waist-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        BMI Statistics
+      </ion-item>
+      <ion-item>
+        <p class="bmi-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Heart Rate Statistics
+      </ion-item>
+      <ion-item>
+        <p class="hr-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Cholesterol Statistics
+      </ion-item>
+      <ion-item>
+        <label><b>HDL</b></label>
+        <p class="hdl-graph"></p>
+      </ion-item>
+
+      <ion-item>
+        <label><b>LDL</b></label>
+        <p class="ldl-graph"></p>
+      </ion-item>
+
+      <ion-item>
+        <label><b>Trigs</b></label>
+        <p class="tri-graph"></p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list type="list-inset">
+      <ion-item class="item-divider">
+        Blood Presure Statistics
+      </ion-item>
+      <ion-item>
+        <label><b>Systolic</b></label>
+        <p class="sys-graph"></p>
+      </ion-item>
+
+      <ion-item>
+        <label><b>Diastolic</b></label>
+        <p class="dia-graph"></p>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

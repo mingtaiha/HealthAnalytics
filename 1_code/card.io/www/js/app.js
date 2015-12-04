@@ -107,12 +107,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
-  .state('app.recordWorkout', {
+  .state('app.aggregate', {
     cache: false,
-    url: '/record/workout',
+    url: '/aggregate',
     views: {
       'menuContent': {
-        templateUrl: 'templates/recordWorkout.html',
+        templateUrl: 'templates/aggregateStats.html',
+        controller: 'AggregateStatsCtrl'
       }
     }
   })

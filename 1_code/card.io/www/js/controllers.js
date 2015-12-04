@@ -1,7 +1,5 @@
-var staticMap = "https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBCxCvlC1kBSNGd0WEvsN5X0BkqDQTdIdo";
-angular.module('starter.controllers', ['starter.services'])
-
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, $ionicHistory, $location, md5, UserService, AuthenticationService) {
+angular.module('starter.controllers', ['ionic', 'starter.services'])
+.controller('AppCtrl', function($scope, $window, $ionicModal, $timeout, $rootScope, $ionicHistory, $location, md5, UserService, AuthenticationService) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -15,6 +13,9 @@ angular.module('starter.controllers', ['starter.services'])
     {text: 'Male', value: 'm'},
     {text: 'Female', value: 'f'}
   ]
+
+  $scope.dev_width = $window.innerWidth;
+  $scope.dev_height = $window.innerHeight;
 
   // List used for state dropdowns
   $scope.stateList = [
@@ -99,6 +100,15 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('LogInCtrl', function($scope, $ionicModal, $rootScope, $timeout, $location, $ionicHistory, $ionicPopup, UserService, AuthenticationService) {
   $scope.loginData = {};
   $scope.registerData = {};
+  $scope.ethnicityList = [];
+
+  // Get ethnicities list to populate dropdown
+  UserService.GetEthnicitiesList().then(function (response) {
+    if(response.success) {
+      $scope.ethnicityList = response.data;
+    }
+  });
+
 
   // Update the registerData variable with a 'Date' object
   // Used for display + data submission purposes
@@ -166,6 +176,20 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.registerData = {}; // delete all registerData when modal is hidden
   });
 
+  /*
+    Ethnicities List Example:
+    [
+      {"ethnicity_id":"Asian","ethnicity":"Asian"},
+      {"ethnicity_id":"Black","ethnicity":"Black"},
+      {"ethnicity_id":"Hisp","ethnicity":"Hispanic"},
+      {"ethnicity_id":"Mixed","ethnicity":"Mixed"},
+      {"ethnicity_id":"NavAm","ethnicity":"Native American"},
+      {"ethnicity_id":"Other","ethnicity":"Other"},
+      {"ethnicity_id":"PacIs","ethnicity":"Pacific Islander"},
+      {"ethnicity_id":"WhiteNonHisp","ethnicity":"White Non Hispanic"}
+    ]
+  */
+
 })
 
 
@@ -176,6 +200,14 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.editing = false;
   $scope.isUserDataHasChanges = false;
   $scope.userProfile = $scope.currentUser; // get it from the cache...
+  $scope.ethnicityList = [];
+
+  // Get ethnicities list to populate dropdown
+  UserService.GetEthnicitiesList().then(function (response) {
+    if(response.success) {
+      $scope.ethnicityList = response.data;
+    }
+  });
 
   // Load the scope data before enetering the view...
   $scope.$on('$ionicView.beforeEnter', function(){
@@ -240,6 +272,20 @@ angular.module('starter.controllers', ['starter.services'])
       $scope.editing = false;
     }
   };
+
+  /*
+    Ethnicities List Example:
+    [
+      {"ethnicity_id":"Asian","ethnicity":"Asian"},
+      {"ethnicity_id":"Black","ethnicity":"Black"},
+      {"ethnicity_id":"Hisp","ethnicity":"Hispanic"},
+      {"ethnicity_id":"Mixed","ethnicity":"Mixed"},
+      {"ethnicity_id":"NavAm","ethnicity":"Native American"},
+      {"ethnicity_id":"Other","ethnicity":"Other"},
+      {"ethnicity_id":"PacIs","ethnicity":"Pacific Islander"},
+      {"ethnicity_id":"WhiteNonHisp","ethnicity":"White Non Hispanic"}
+    ]
+  */
 
 })
 
@@ -681,6 +727,215 @@ angular.module('starter.controllers', ['starter.services'])
 // Used for allowing users (future teams) to change the 
 // URL of the application, etc...
 .controller('SettingsCtrl', function($scope, $stateParams) {
+})
+
+.controller('AggregateStatsCtrl', function($scope, $stateParams, $ionicPopup, HealthService){
+  $scope.numbins = 20.0; // number of agggregate data bins  
+  $scope.selectedData = {};
+  $scope.graphs = [];
+  $scope.totalPopulation = '';
+  
+
+  $scope.generateGraphs = function() {
+    if ($scope.selectedData && $scope.selectedData.state) {
+      HealthService.GetAggregateStats($scope.selectedData.state).then(function (response) {
+        if (response.success) {
+          
+          // get the stats object
+          var agStats = response.data;
+          
+          // First remove all of the old ones...
+          d3.selectAll("svg").remove();
+          $scope.totalPopulation = '';
+
+          // Update population
+          $scope.totalPopulation = agStats.population_summary[0]['population'];
+
+          // Generate all Histographs
+          $scope.createHistogram('age',agStats.age_summary[0]);
+          $scope.createHistogram('bmi',agStats.bmi_summary[0]);
+          $scope.createHistogram('weight',agStats.weight_summary[0]);
+          $scope.createHistogram('height',agStats.height_summary[0]);
+          $scope.createHistogram('waist',agStats.waist_summary[0]);
+          $scope.createHistogram('hr',agStats.hr_summary[0]);
+          $scope.createHistogram('tri',agStats.tri_summary[0]);
+          $scope.createHistogram('hdl',agStats.hdl_summary[0]);
+          $scope.createHistogram('ldl',agStats.ldl_summary[0]);
+          $scope.createHistogram('sys',agStats.sys_summary[0]);
+          $scope.createHistogram('dia',agStats.dia_summary[0]);
+
+          // Generate all Pie Charts
+           var stats = [{key:'male', value: agStats.gender_summary[0].male}, {key:'female', value: agStats.gender_summary[0].female}];
+          $scope.createPieChart('gender',stats);
+          stats = [];
+          for (var k in agStats.ethnicity_summary[0]) {
+            if( agStats.ethnicity_summary[0].hasOwnProperty(k) && k !== 'state' ) {
+              stats.push({key: k, value: agStats.ethnicity_summary[0][k]});
+            } 
+          }
+          console.log(stats);
+          $scope.createPieChart('ethnicity',stats);
+
+          
+        } else {
+          // An alert dialog
+          $ionicPopup.alert({
+            title: 'Could not leat stats.',
+            template: response.data
+          });
+        }
+      });
+    } else {
+      // An alert dialog
+      $ionicPopup.alert({
+        title: 'Error',
+        template: 'Select a state'
+      });
+    }
+  }
+
+  // Created a histogram from the aggregate data that comes from the server
+  $scope.createHistogram = function(label, stats) {
+    
+    // Bin information
+    // Bin Size == max-min / 20
+    var binsize = (stats.max - stats.min) / $scope.numbins
+
+    // Set the limits of the x axis
+    var xmin = stats.min - 1
+    var xmax = stats.max + 1
+    
+    var data = new Array($scope.numbins);
+    for (var i = 0; i < $scope.numbins; i++) {
+      data[i] = { numfill: parseFloat(stats['bin' + (i+1)]).toFixed(5) };
+    }
+
+    // A formatter for counts.
+    var formatCount = d3.format("%");
+
+    var margin = {top: 10, right: 65, bottom: 20, left: 40},
+        binmargin = .2,
+        width = $scope.dev_width - margin.left - margin.right,
+        height = parseInt($scope.dev_height / 3) - margin.top - margin.bottom;
+
+    // This scale is for determining the widths of the histogram bars
+    // Must start at 0 or else x(binsize a.k.a dx) will be negative
+    var x = d3.scale.linear()
+        .domain([0, (xmax - xmin)]) // min to max
+        .range([0, width]);
+
+    // Scale for the placement of the bars
+    var x2 = d3.scale.linear()
+        .domain([xmin, xmax])
+        .range([0, width]);
+
+    // Y axis
+    var y = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.numfill; })])
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x2)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .ticks(10)
+        .orient("left")
+        .tickFormat(formatCount);
+
+    // put the graph in the "p" tag
+    var svg = d3.select("."+ label +"-graph").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // set up the bars 
+    var bar = svg.selectAll(".graph-bar")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "graph-bar")
+        .attr("transform", function(d, i) { return "translate(" + x2(i * binsize + stats.min) + "," + y(d.numfill) + ")"; });
+
+    // add rectangles of correct size at correct location
+    bar.append("rect")
+        .attr("x", x(binmargin))
+        .attr("width", x(binsize - 2 * binmargin))
+        .attr("height", function(d) { return height - y(d.numfill); });
+
+
+    // add the x axis and x-label
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+    bar.append("text")
+        .attr("class", "xlabel")
+        .attr("text-anchor", "middle")
+        .attr("dy", ".75em")
+        .attr("x", width / 2)
+        .attr("y", height + margin.bottom)
+        .text('Age distribution');
+
+    // add the y axis and y-label
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(0,0)")
+        .call(yAxis);
+  }
+
+  // Creates a Pie Chart with data that comes from the server
+  // The stats need to be pre configures into an array of:
+  // [{key:'', value:''}, ....]
+  $scope.createPieChart = function(label, stats) {
+    var margin = {top: 10, right: 50, bottom: 20, left: 30},
+      width = $scope.dev_width - margin.left - margin.right,
+      height = parseInt($scope.dev_height / 3),
+      radius = Math.min(width, height) / 2;
+
+    var color = d3.scale.ordinal()
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var arc = d3.svg.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+    var labelArc = d3.svg.arc()
+        .outerRadius(radius - 40)
+        .innerRadius(radius - 40);
+
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function(d) { return d.value; });
+
+    var svg = d3.select("."+label+"-graph").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var g = svg.selectAll(".arc")
+        .data(pie(stats))
+      .enter().append("g")
+        .attr("class", "arc");
+
+    g.append("path")
+        .attr("d", arc)
+        .style("fill", function(d) { return color(d.data.key); });
+
+    g.append("text")
+        .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+        .attr("dy", ".35em")
+        .text(function(d) { return d.data.key; });
+  }
+
+  $scope.formatPopulation = function (x) {
+    if(x !== '') {
+      return parseInt(x).toLocaleString();
+    }
+  }
+
 });
 
 

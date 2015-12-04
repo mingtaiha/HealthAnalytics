@@ -16,6 +16,7 @@ angular.module('starter.config', [])
   'addUserApi': 'addUser/',
   'updateUserApi': 'updateUser/',
   'deleteUserApi': 'deleteUser/',
+  'getEthnicities': 'getEthnicities/',
 
   // Food API
   'getFoodListApi': 'getFoodList/',
@@ -32,6 +33,7 @@ angular.module('starter.config', [])
 
   // Health Stats API
   'getHealthStats': 'getHealthStats/',
+  'getAggregatedHealthStats': 'getAggregatedHealthStats/',
 
   /* Should we use local API or use the server? 'true' for local, 'false' for server */
   'apiLocal': false
