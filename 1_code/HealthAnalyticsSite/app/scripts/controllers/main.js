@@ -48,4 +48,39 @@ angular.module('healthAnalyticsSiteApp')
       {value: 'WA', text: 'Washington'}, {value: 'WV', text: 'West Virginia'},
       {value: 'WI', text: 'Wisconsin'}, {value: 'WY', text: 'Wyoming'}
     ]
+
+
+    // Used to display a food icon in the list
+    // Defaults to the fork icon.
+    $scope.getFoodIcon = function(foodName) {
+      var foods = {
+        'cheese pizza': 'ion-pizza',
+        'coffee (milk and sugar)': 'ion-coffee',
+        'yellow cake with vanilla frosting': 'ion-fork'
+      };
+      var retIcon = foods[foodName.toLowerCase()];
+      return retIcon || 'ion-fork';
+    }
+
+    // Checks if user is logged in
+    $scope.isUserLogged = function(){
+      return AuthenticationService.IsLoggedIn();
+    }
+
+    $scope.getCurrentUser = function() {
+      return AuthenticationService.CurrentUser().user;
+    }
+
+    // Logs out...
+    $scope.doLogOut = function() {
+      AuthenticationService.Logout();
+      $ionicHistory.nextViewOptions({disableBack: true});
+      $location.path('app/login');
+    }
+
+    // Watch for the set current user everytime it changes
+    // in the authentication service.
+    $scope.$watch( 'getCurrentUser()' , function ( newValue, oldValue ) {
+      $scope.currentUser = newValue;
+    });
   });
