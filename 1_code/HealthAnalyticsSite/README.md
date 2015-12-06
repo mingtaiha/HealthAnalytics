@@ -15,6 +15,8 @@ This project used the following resources:
 
 ## Build & development
 
+First thing you must do is to run npm install while in this directory to install all of the neccasary dependencies.
+
 Run `grunt` for building and `grunt serve` for preview.
 
 ## Testing
