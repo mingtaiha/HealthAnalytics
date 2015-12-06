@@ -1,4 +1,6 @@
-<?php include('SE1Exception.php');
+<?php
+include('SE1Exception.php');
+include('health_stats.php');
 
 class driver extends PDO
 {
@@ -261,8 +263,17 @@ class datastore
 
 	function getHealthStats($authtoken,$age,$height,$weight,$waist_size,$gender,$ethnicity,$state,$email){
 		$this->__authenticateUser($authtoken);
-		include('health_stats.php');
 		if(empty($email)){
+			if(empty($weight)){throw new DatastoreException('You must provide the Weight',5);}
+			if(empty($height)){throw new DatastoreException('You must provide the Height',5);}
+			if(empty($gender)){throw new DatastoreException('You must provide the Gender',5);}
+			if(empty($age)){throw new DatastoreException('You must provide the Age',5);}
+			if(empty($waist_size)){throw new DatastoreException('You must provide the Waist Size',5);}
+			if(empty($state)){throw new DatastoreException('You must provide the State',5);}
+			if(empty($ethnicity)){throw new DatastoreException('You must provide the Ethnicity',5);}
+			if(!is_numeric($height)){throw new DatastoreException('Invalid Height',5);}
+			if(!is_numeric($weight)){throw new DatastoreException('Invalid Weight',5);}
+			if(!is_numeric($waist_size)){throw new DatastoreException('Invalid Waist Size',5);}
 			$person=['State'=>$state,'Gender'=>strtoupper($gender),'Waist'=>$waist_size,'Height'=>$height,'Age_years'=>$age,'Ethnicity'=>$ethnicity];
 		}
 		else{
@@ -289,7 +300,7 @@ class datastore
 	public function getUser($email,$authtoken){
 		$this->__authenticateUser($authtoken);
 		try{
-			$pstmt=$this->db->prepare('SELECT fname,mi,lname,role,email,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip FROM people WHERE email=? LIMIT 1');
+			$pstmt=$this->db->prepare('SELECT fname,mi,lname,role,email,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip,ethnicity FROM people WHERE email=? LIMIT 1');
 			$pstmt->execute([$email]);
 			$rs=$pstmt->fetch(PDO::FETCH_ASSOC);
 			if($rs['email']!=$this->authenticatedUser['email']){throw new DatastoreException('You cannot retrieve this user',2);}
@@ -303,7 +314,7 @@ class datastore
 		if($this->authenticatedUser['role']!='admin'){throw new DatastoreException('You do not have the rights to perform this action',3);}
 		try{
 			$user=[];
-			$stmt=$this->db->query('SELECT fname,mi,lname,role,email,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip FROM people');
+			$stmt=$this->db->query('SELECT fname,mi,lname,role,email,weight,height,birth_date,gender,waist_size,address1,address2,city,state,zip,ethnicity FROM people');
 			if($stmt->rowCount()>0){
 				while($rs=$stmt->fetch(PDO::FETCH_ASSOC)){
 					$user[]=$this->__typecast('user',$rs);
@@ -396,12 +407,11 @@ class datastore
 		}
 	}
 
-	public function logoutUser($authtoken,$user){
+	public function logoutUser($authtoken){
 		$this->__authenticateUser($authtoken);
 		try{
-			if($user!=$this->authenticatedUser['email']){throw new DatastoreException('You cannot logout this user',2);}
-			$pstmt=$this->db->prepare('DELETE FROM session WHERE person=? AND authtoken=?');
-			$pstmt->execute([$this->authenticatedUser['pkey'],$authtoken]);
+			$pstmt=$this->db->prepare('DELETE FROM session WHERE authtoken=?');
+			$pstmt->execute([$authtoken]);
 			return('{"results":"Logout Complete"}');
 		}
 		catch(PDOException $e){throw new DatastoreException('Unable to logout user',1);}

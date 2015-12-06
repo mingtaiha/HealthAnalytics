@@ -1,6 +1,4 @@
 <?php include('datastore.php');
-//include('C:\\Users\\Administrator\\Documents\\GitHub\\HealthAnalytics\\1_code\\Datastore\\datastore.php');
-
 
 class DatastoreTest extends PHPUnit_Framework_TestCase
 {
@@ -24,7 +22,6 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
 	public static function tearDownAfterClass(){
 		self::$ds->db->query('DELETE FROM workout WHERE workout_id="'.self::$workout_id.'"');
 		self::$ds->db->query('DELETE FROM food WHERE userfood_id="'.self::$userfood_id.'"');
-		self::$ds->db->query('DELETE FROM session WHERE authtoken="'.self::$authtoken.'"');
 		self::$ds->db->query('DELETE FROM people WHERE email="'.self::$email.'"');
 		self::$ds=NULL;
 	}
@@ -547,4 +544,117 @@ class DatastoreTest extends PHPUnit_Framework_TestCase
     public function test_updateUserInvalidEthnicityException(){
    	 	self::$ds->updateUser('Bob','Smith',self::$email,'E',220,72,'1987-09-16T00:00:00Z','M',34,'123 Easy Street','A2','Edison','NJ','08854',self::$authtoken,'Hispz');
    	}
+
+	public function test_getEthnicities(){
+		$x=self::$ds->getEthnicities(self::$authtoken);
+		$this->assertRegExp('/{"ethnicity_id":/', $x);
+	}
+
+	public function test_AggregatedHealthStats(){
+		$x=self::$ds->getAggregatedHealthStats('NJ');
+		$this->assertRegExp('/{"age_summary":/', $x);
+	}
+
+	public function test_getHealthStatsA(){
+		$x=self::$ds->getHealthStats(self::$authtoken,44,72,220,36,'M','WhiteNonHisp','NJ','');
+		$this->assertRegExp('/{"Dia":/', $x);
+	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Weight
+     */
+    public function test_getHealthStatsAMissingWeightException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,'',36,'M','WhiteNonHisp','NJ','');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Height
+     */
+    public function test_getHealthStatsAMissingHeightException(){
+		self::$ds->getHealthStats(self::$authtoken,44,'',220,36,'M','WhiteNonHisp','NJ','');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Gender
+     */
+    public function test_getHealthStatsAMissingGenderException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,220,36,'','WhiteNonHisp','NJ','');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Waist Size
+     */
+    public function test_getHealthStatsAMissingWaistSizeException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,220,'','M','WhiteNonHisp','NJ','');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Age
+     */
+    public function test_getHealthStatsAAgeException(){
+		self::$ds->getHealthStats(self::$authtoken,'',72,220,36,'M','WhiteNonHisp','NJ','');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the Ethnicity
+     */
+    public function test_getHealthStatsAEthnicityException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,220,36,'M','','NJ','');
+   	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage You must provide the State
+     */
+    public function test_getHealthStatsAStateException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,220,36,'M','WhiteNonHisp','','');
+	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage Invalid Weight
+     */
+    public function test_getHealthStatsAInvalidWeightException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,'.2.20',36,'M','WhiteNonHisp','NJ','');
+	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage Invalid Height
+     */
+    public function test_getHealthStatsAInvalidHeightException(){
+		self::$ds->getHealthStats(self::$authtoken,44,'e7eew2',220,36,'M','WhiteNonHisp','NJ','');
+	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage Invalid Waist Size
+     */
+    public function test_getHealthStatsAInvalidWaistSizeException(){
+		self::$ds->getHealthStats(self::$authtoken,44,72,220,'36zx','M','WhiteNonHisp','NJ','');
+	}
+
+	public function test_getHealthStatsB(){
+		$x=self::$ds->getHealthStats(self::$authtoken,'','','','','','','',self::$email);
+		$this->assertRegExp('/{"Dia":/', $x);
+	}
+
+    /**
+     * @expectedException DatastoreException
+	 * @expectedExceptionMessage User stats not found
+     */
+    public function test_getHealthStatsBNoUsrException(){
+		$x=self::$ds->getHealthStats(self::$authtoken,'','','','','','','',self::$email.'ddd');
+	}
+
+	public function test_logoutUser(){
+		$x=self::$ds->logoutUser(self::$authtoken);
+		$this->assertEquals('{"results":"Logout Complete"}',$x);
+	}
 }
