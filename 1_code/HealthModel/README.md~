@@ -5,13 +5,6 @@
 **Hello!** This is the the README for running the Model component
 of the program!
 
-**NOTE** To run our Decision_Tree_State.py, you will need to place
-this file in the same directory as all the other state level samples.
-These files can be found in the 4_data_collection/Simulations/(Sample)/
-For your convenience, there is already a copy in the 
-4_data_collection/Simulations/ folder. You can refer to README file
-there for more instructions.
-
 This program assumes that you have Python and PIP installed
 on your computer. If you have those Python 2.7.10 installed
 and PIP installed, then you can go straight to Step 1. If not,
