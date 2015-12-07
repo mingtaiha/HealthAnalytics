@@ -13,11 +13,12 @@ class api
 	public $furl_function='';
 	public $furl_id='';
 	public $datastore='';
-	public $retval=['results'=>''];
 
-	/**
-	*
-	*/
+	#An API request comes in the following format:
+	# /api/furl_function/furl_id/?URL_VARIABLES
+	# OR
+	# /api/furl_function/?URL_VARIABLES
+
 	public function __construct(){
 		if($_GET['furl_function']=='null'){
 			throw new apiException('No function was provided',1);
@@ -33,7 +34,10 @@ class api
 				parse_str(trim($data),$requestVars);
 			break;
 		}
+		# requestVars gathers up POST and GET variables and merges them into a single array
 		$this->requestVars=$requestVars;
+
+		#The auth token can be sent to the API server as a header to addition to being via a POST or GET request.
 		if(isset($_SERVER['HTTP_AUTHTOKEN'])){$this->requestVars['authtoken']=$_SERVER['HTTP_AUTHTOKEN'];}
 		if(!empty($_GET)){
 			foreach($_GET as $key=>$val){

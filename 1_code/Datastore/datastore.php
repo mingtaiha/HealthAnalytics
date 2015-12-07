@@ -6,7 +6,11 @@ class driver extends PDO
 {
 	function __construct(){
 		try{
-			parent::__construct('mysql:host=localhost;dbname=se1;charset=UTF8','se1','dfj59jnah19jmdig');
+			#connection string to the database. The $user and $password are specified by MySQL. You can use the root user
+			#for grading purposes.
+			$user='XXXX';
+			$password='YYYY';
+			parent::__construct('mysql:host=localhost;dbname=se1;charset=UTF8',$user,$password);
 			$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 		catch(PDOException $e){
@@ -36,11 +40,13 @@ class datastore
 		}
 	}
 
+	#if a PDOException error is caught, this will log the error.
 	private function __logError($error,$func){
 		$pstmt=$this->db->prepare('INSERT INTO datastore_errors (error,func) VALUES (?,?)');
 		$pstmt->execute([$error,$func]);
 	}
 
+	#ensure that the authtoken provide is valid.
 	private function __authenticateUser($authtoken){
 		try{
 			$pstmt=$this->db->prepare('SELECT people.pkey,people.fname,people.lname,people.email,people.role FROM session INNER JOIN people ON people.pkey=session.person WHERE authtoken=?');
@@ -54,7 +60,8 @@ class datastore
 		catch(PDOException $e){throw new DatastoreException('ERROR, unable to authenication user',2);}
 	}
 
-	#There is a bug with PHP PDO which causes non-strings to be cast as strings when pulled from the database
+	#There is a bug with PHP PDO which causes non-strings to be cast as strings when pulled from the database.
+	#this will type cast them back to FLOAT or INT.
 	private function __typecast($table,$record){
 		$flds_int=[
 			'workout'=>['workout_id','calories','duration'],

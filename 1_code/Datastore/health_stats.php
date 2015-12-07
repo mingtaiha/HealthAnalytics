@@ -1,4 +1,11 @@
 <?php
+#This file reads the contents of the files in the model directory to generate the stats
+#Six stats are fetch, which are fetched as specified by the "stats" variable.
+#They are JSON files which this algorithm recursively parses until the desire data is collected.
+#Give the give of the JSON file, it was determined that leaving this data in a JSON file was
+#the most efficient way of accessing this data.  Putting this data into to database was very
+#slow given the amount of data that the database would have to return.
+
 class model{
 	public $stats=['Dia','HDL','HR','LDL','Sys','Tri'];
 	public $personData=[];
@@ -30,7 +37,6 @@ class model{
 				$this->__branch($data[$i]['children']);
 				break;
 			}
-			//echo $value[0].'--'.$value[1].'**'.$min.'##'.$max.' '.$this->personData[$attrib].' '.$attrib."\r\n";
 		}
 	}
 
