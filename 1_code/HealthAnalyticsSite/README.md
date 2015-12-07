@@ -1,7 +1,10 @@
-# health-analytics-site
+# Health Analytics Site
 
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 0.14.0.
+
+## NOTICE
+App currently does not run 100% since I am still in the process of transforming all of the Ionic code into AngularJS
 
 ## Resources
 
@@ -14,6 +17,8 @@ This project used the following resources:
 * Grunt- Packaging and build manager.
 
 ## Build & development
+
+First thing you must do is to run `npm install` while in this directory to install all of the neccasary dependencies.
 
 Run `grunt` for building and `grunt serve` for preview.
 
