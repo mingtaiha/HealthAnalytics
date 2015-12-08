@@ -12,3 +12,5 @@ Our system is broken down into 5 parts (represented by the '[]' above). Each of 
 This folder contains all of the modules and each module contains its own readme file with instructions on how to install and run. This file is in either text or markdown format (see: https://help.github.com/articles/github-flavored-markdown/). 
 
 Finally, once the systems begin to be integrated, we will add scripts and instructions (README) on how to install/run the entire system (together) in the "Complete" folder.
+
+*Note: * The Mobile application's name is 'card.io' so all files needed for it are under the folder with the same name.

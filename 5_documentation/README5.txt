@@ -1,4 +1,4 @@
-Here we have the following files:
+Here we have the following files broken down into 2 folders (Demo1 and Demo2):
 
 1) technical_documentation.pdf
 2) user_documentation.pdf
@@ -7,4 +7,4 @@ Here we have the following files:
 5) individual_contributions.pdf -- (this document should include the project management information, item 12 in Section 4.1 of this webpage)
 
 
-*Note:* Files (1) and (2) are not applicable for demo #1
+*Note:* Files (1) and (2) are not applicable for demo #1 nor demo#2

@@ -48,13 +48,13 @@ angular.module('starter.controllers', ['ionic', 'starter.services'])
 
   // Used to display a workout icon in the list
   // Defaults to the ribbon icon.
-  $scope.getWorkoutIcon = function(foodName) {
-    var foods = {
+  $scope.getWorkoutIcon = function(name) {
+    var workouts = {
       'walk': 'ion-android-walk',
       'jog': 'ion-ribbon-a',
       'bike': 'ion-android-bicycle'
     };
-    var retIcon = foods[foodName.toLowerCase()];
+    var retIcon = workouts[name.toLowerCase()];
     return retIcon || 'ion-ribbon-a';
   }
 
@@ -240,6 +240,7 @@ angular.module('starter.controllers', ['ionic', 'starter.services'])
   $scope.saveProfile = function() {
     if ($scope.editing && $scope.isUserDataHasChanges) {
       UserService.Update($scope.userProfile).then(function (response){
+        console.log('WOOOO' + JSON.stringify({}));
         if (response.success) { // update success
 
           // A success alert dialog

@@ -1,6 +1,5 @@
 angular.module('starter.config', [])
 .constant('AppConfig', {
-  'version': '0.1',
 
   /* The api server url */
   'apiUrl': 'http://www.rugatech.com/se1/api/',
@@ -35,7 +34,6 @@ angular.module('starter.config', [])
   'getHealthStats': 'getHealthStats/',
   'getAggregatedHealthStats': 'getAggregatedHealthStats/',
 
-  /* Should we use local API or use the server? 'true' for local, 'false' for server */
-  'apiLocal': false
-  
+  // Api Version
+  'version': '0.1'
 });

@@ -18,14 +18,18 @@ You will need the following things properly installed on your computer.
 * `npm install`
 * `bower install`
 
-## Adding Platforms
+## Unit test cases
+
+* `gulp test`
+
+## Adding Mobile Platforms
 
 * iOS: `ionic platform add ios` 
 * Android: `ionic platform add android`
 
 *Note: * To be able to install and run these applications you need to configure your environment for them, please follow [this](https://cordova.apache.org/docs/en/5.1.1/guide/platforms/index.html) guide that shows each platform.
 
-### Building
+### Building Code
 
 * `ionic build <platform>`
 
