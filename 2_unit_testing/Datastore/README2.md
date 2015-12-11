@@ -24,3 +24,7 @@ processorTest.php
 Once PHPUnit is properly installed, the syntax for running the tests are:
 phpunit datastoreTest.php
 phpunit processorTest.php
+
+You can use the username and passowrd for testing purposes:
+email: ntaylor@aps.rutgers.edu
+password: 123456

@@ -42,6 +42,12 @@ class ProcessorTest extends PHPUnit_Framework_TestCase
 		return([$header,$body]);
 	}
 
+	public function test_invalidFunctionRequest(){
+		$data=$this->curl('ABCDEFD/'.self::$email,['authtoken'=>self::$authtoken]);
+		$x=explode("\r\n",$data[0]);
+		$this->assertEquals($x[0],'HTTP/1.1 404 function not found');
+	}
+
     /**
      * @param array $testData
 	 * @dataProvider dataProvider
