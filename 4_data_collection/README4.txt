@@ -6,22 +6,29 @@ We used CDC data for our project, there are plenty of files available and we onl
 Census 2010:
 We used Census-2010 data to estimate state-level population. We already exported what we needed and added the json data files here, but we included a document explaining our process. The link used to browse the Census data was: http://www.census.gov/data/developers/data-sets/decennial-census-data.html
 
+Aggregated_State_Tables:
 The folder Aggregated_State_Tables contain the data used by the application to display
 state level statistics in forms of pie charts and histograms
 
-The CDC and Census2010 data contains the data files to generate the Sample State Population
-
-The National Models contain the Health Models derived from National Level Data
-
+Simulations:
 The Simulations folder contains scripts that generate the sample, create the state level models.
 creates csv files that aggregate the different attributes of the simulated population on a
 state level, and creates csv files which return the percentage of the population of 'poor'
 health (Overweight/Obese, Hypertension, High Cholesterol)
 
-The State Models contain the Health Models derived from State Sample Simulations
+State Models:
+The State Models folder contain the Health Models derived from State Sample Simulations
 
+Summaries: 
 The Summaries folder contain useful csv files that characterizes the performance
 of our model and data.
 
-Note:
-We manually downloaded these files and (in some cases) did some manual cleanup. Systematic ingestion and final filtering is done by the health model system seen in the code section.
+
+
+Notes:
+
+- We manually downloaded these files and (in some cases) did some manual cleanup. Systematic ingestion and final filtering is done by the health model system seen in the code section.
+
+- The CDC and Census2010 data contains the data files to generate the Sample State Population
+
+- The National Models contain the Health Models derived from National Level Data

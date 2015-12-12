@@ -9,6 +9,7 @@ You will need the following things properly installed on your computer.
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/) (with NPM)
 * [Bower](http://bower.io/)
+* [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md)
 * [Ionic](http://ionicframework.com/getting-started/)
 
 ## Installation

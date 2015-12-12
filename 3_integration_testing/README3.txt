@@ -6,4 +6,4 @@ refer to the 'services' test file to see how we run all requests to the processo
 
 See the README file in `1_code/card.io` for details on how to run the test cases.
 
-See the README2 file in `2_unit_testing/datastore` for information on how to run test cases for the processor/datastore. 
+See the README file in `2_unit_testing/datastore` for information on how to run test cases for the processor/datastore. 
